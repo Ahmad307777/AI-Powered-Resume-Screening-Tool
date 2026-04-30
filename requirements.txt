@@ -1,0 +1,11 @@
+streamlit
+joblib
+scikit-learn
+pandas
+numpy
+mysql-connector-python
+nltk
+PyPDF2
+docx2txt
+scipy
+plotly
