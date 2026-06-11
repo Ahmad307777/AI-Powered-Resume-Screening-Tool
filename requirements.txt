@@ -9,3 +9,6 @@ PyPDF2
 docx2txt
 scipy
 plotly
+fastapi
+uvicorn
+python-multipart

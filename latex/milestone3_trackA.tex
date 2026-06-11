@@ -1,0 +1,594 @@
+\documentclass[10pt,twocolumn]{article}
+
+% ── Packages ──────────────────────────────────────────────────────────────────
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage[margin=1in,top=0.85in,bottom=0.85in]{geometry}
+\usepackage{microtype}
+\usepackage{graphicx}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{multirow}
+\usepackage{multicol}
+\usepackage{array}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{abstract}
+\usepackage{caption}
+\usepackage{listings}
+\usepackage{tcolorbox}
+\usepackage{fontawesome5}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\usepackage{float}
+\usepackage{parskip}
+\usepackage{cite}
+\usepackage{balance}
+
+\pgfplotsset{compat=1.18}
+\tcbuselibrary{skins,breakable}
+
+% ── Colors ────────────────────────────────────────────────────────────────────
+\definecolor{primary}{HTML}{1e3a8a}
+\definecolor{accent}{HTML}{3730a3}
+\definecolor{green}{HTML}{065f46}
+\definecolor{teal}{HTML}{0f766e}
+\definecolor{red}{HTML}{991b1b}
+\definecolor{amber}{HTML}{92400e}
+\definecolor{gray}{HTML}{475569}
+\definecolor{lightgray}{HTML}{f1f5f9}
+\definecolor{codebg}{HTML}{0f172a}
+\definecolor{codegreen}{HTML}{1ed760}
+\definecolor{rowalt}{HTML}{f8fafc}
+\definecolor{bestrow}{HTML}{d1fae5}
+
+% ── Hyperref ──────────────────────────────────────────────────────────────────
+\hypersetup{
+  colorlinks=true,
+  linkcolor=primary,
+  citecolor=primary,
+  urlcolor=teal,
+  pdftitle={AI-Driven Resume Screening — Milestone 3},
+  pdfauthor={Ahmad Mustafa, Raqib Hayat, Niyaz Ali Malik, Tahir},
+}
+
+% ── Section Formatting ────────────────────────────────────────────────────────
+\titleformat{\section}{\large\bfseries\color{primary}}{}{0em}{}[\titlerule]
+\titleformat{\subsection}{\normalsize\bfseries\color{accent}}{}{0em}{}
+\titleformat{\subsubsection}{\small\bfseries\color{teal}}{}{0em}{}
+\titlespacing{\section}{0pt}{10pt}{4pt}
+\titlespacing{\subsection}{0pt}{8pt}{3pt}
+\titlespacing{\subsubsection}{0pt}{6pt}{2pt}
+
+% ── Header / Footer ───────────────────────────────────────────────────────────
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0.4pt}
+\fancyhead[L]{\small\color{gray} CSC-361 Machine Learning \textbar\ Track A \textbar\ Milestone 3}
+\fancyhead[R]{\small\color{gray} Spring 2025}
+\fancyfoot[C]{\small\thepage}
+
+% ── Code Listings ─────────────────────────────────────────────────────────────
+\lstdefinestyle{pycode}{
+  backgroundcolor=\color{codebg},
+  basicstyle=\ttfamily\tiny\color{codegreen},
+  keywordstyle=\color{cyan}\bfseries,
+  stringstyle=\color{yellow},
+  commentstyle=\color{gray}\itshape,
+  numbers=none,
+  frame=none,
+  breaklines=true,
+  breakatwhitespace=true,
+  tabsize=4,
+  language=Python,
+  xleftmargin=6pt,
+  xrightmargin=6pt,
+  aboveskip=4pt,
+  belowskip=4pt,
+}
+
+% ── Custom Boxes ──────────────────────────────────────────────────────────────
+\tcbset{
+  infbox/.style={
+    enhanced,colback=lightgray,colframe=primary,
+    fonttitle=\small\bfseries\color{white},
+    coltitle=white,attach boxed title to top left,
+    boxed title style={colback=primary,rounded corners},
+    rounded corners,boxrule=0.6pt,left=6pt,right=6pt,top=4pt,bottom=4pt,
+  },
+  resultbox/.style={
+    enhanced,colback=bestrow,colframe=green,
+    fonttitle=\small\bfseries,coltitle=green,
+    attach boxed title to top left,
+    boxed title style={colback=bestrow,rounded corners,colframe=green},
+    rounded corners,boxrule=0.8pt,left=6pt,right=6pt,top=4pt,bottom=4pt,
+  },
+}
+
+% ── Abstract styling ──────────────────────────────────────────────────────────
+\renewcommand{\abstractnamefont}{\normalfont\bfseries\color{primary}}
+\renewcommand{\abstracttextfont}{\small\itshape}
+\setlength{\absleftindent}{0pt}
+\setlength{\absrightindent}{0pt}
+
+% ── Table helpers ─────────────────────────────────────────────────────────────
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+\newcolumntype{C}[1]{>{\centering\arraybackslash}p{#1}}
+\newcolumntype{R}[1]{>{\raggedleft\arraybackslash}p{#1}}
+
+\setlist[itemize]{leftmargin=*,topsep=2pt,itemsep=1pt,parsep=0pt}
+\setlist[enumerate]{leftmargin=*,topsep=2pt,itemsep=1pt,parsep=0pt}
+
+\captionsetup{font=small,labelfont={bf,color=primary},skip=4pt}
+
+% ══════════════════════════════════════════════════════════════════════════════
+\begin{document}
+% ══════════════════════════════════════════════════════════════════════════════
+
+% ── Title block ───────────────────────────────────────────────────────────────
+\twocolumn[{%
+\begin{center}
+  {\small\color{gray}\textsc{Namal University} \textbar\ Department of Computer Science \textbar\ CSC-361: Machine Learning}\\[4pt]
+  {\small\color{gray}Track A -- Research-Oriented Project \textbar\ Milestone 3 \textbar\ Spring 2025}\\[10pt]
+  {\LARGE\bfseries\color{primary} AI-Driven Resume Screening and Classification System}\\[6pt]
+  {\large\itshape\color{gray} A Multi-Signal Machine Learning Pipeline for Automated Candidate Screening}\\[8pt]
+  {\small Ahmad Mustafa \quad Raqib Hayat \quad Niyaz Ali Malik \quad Tahir}\\[2pt]
+  {\small\color{gray} Supervisor: Dr.\ Shafiq Ur Rehman Khan \quad\textbar\quad Submission: 30 May 2025}\\[10pt]
+  \noindent\textcolor{primary}{\rule{\linewidth}{0.8pt}}\\[6pt]
+\end{center}
+}]
+
+% ── Abstract ──────────────────────────────────────────────────────────────────
+\begin{abstract}
+This paper presents the complete research and implementation of \textbf{Screen.AI}, an end-to-end AI-driven resume screening and classification system for real-time multi-class job-role categorization across 25 professional categories. A ten-step preprocessing pipeline -- comprising lowercase normalization, WordNet lemmatization, stopword removal, and SMOTE-Tomek class balancing -- transforms raw resume text into 20{,}000-feature TF-IDF vectors. Five algorithms were systematically evaluated: K-Nearest Neighbors (74.30\%), Decision Tree (76.50\%), XGBoost (84.80\%), SVM (85.40\%), and Random Forest (87.00\%). The Random Forest Classifier with 500 estimators, selected via GridSearchCV over 5-fold cross-validation, achieved the highest test accuracy with Precision~87.34\%, Recall~86.91\%, and F1~87.12\%. The deployed system integrates a three-signal scoring mechanism (ML classification, keyword matching, TF-IDF cosine similarity) with smart category override logic. A secondary Groq Llama~3.3-70B integration provides generative CV enhancement feedback. The full-stack application -- FastAPI backend, React frontend, SQLite database -- is deployed end-to-end with a fully reproducible training pipeline.
+\end{abstract}
+
+\noindent\textbf{Keywords:} Random Forest, TF-IDF, SMOTE-Tomek, multi-class text classification, resume screening, cosine similarity, FastAPI, Groq Llama, NLP preprocessing.
+
+\vspace{6pt}
+\noindent\textcolor{primary}{\rule{\linewidth}{0.4pt}}
+\vspace{4pt}
+
+% ══════════════════════════════════════════════════════════════════════════════
+\section{Introduction}
+% ══════════════════════════════════════════════════════════════════════════════
+
+The exponential growth of digital job applications has created a critical operational bottleneck for human resource departments. Organizations routinely receive thousands of applications per position; manual screening is not only time-consuming but statistically inconsistent~\cite{garcia2023}. Recruiters typically spend an average of six seconds on an initial resume scan, introducing substantial bias and causing qualified candidates to be overlooked.
+
+Automated resume screening systems address this bottleneck by applying natural language processing (NLP) and machine learning (ML) to extract, vectorize, and classify resume content at scale. The core research challenge is that resume text is unstructured, domain-diverse, and characterized by high vocabulary overlap across adjacent professional categories -- making classification a non-trivial multi-class text problem.
+
+\subsection{Research Objectives}
+\begin{itemize}
+  \item Design and implement a comprehensive preprocessing pipeline for raw resume text.
+  \item Evaluate and compare five ML algorithms under identical experimental conditions.
+  \item Apply hyperparameter optimization to identify the best-performing configuration.
+  \item Develop a multi-signal scoring mechanism combining ML, keyword matching, and cosine similarity.
+  \item Deploy a full-stack application with HR and candidate portals.
+  \item Augment the pipeline with Groq Llama~3.3-70B for generative CV feedback.
+\end{itemize}
+
+\subsection{Research Gap}
+Existing literature clusters around two extremes: lightweight keyword matching (high speed, low accuracy) or transformer-based deep learning (high accuracy, high latency). This work occupies the underexplored middle ground -- an optimized ensemble classifier on TF-IDF features that balances 87\% accuracy with real-time ($<$2s) inference, demonstrated through a production-grade full-stack deployment.
+
+% ══════════════════════════════════════════════════════════════════════════════
+\section{Related Work}
+% ══════════════════════════════════════════════════════════════════════════════
+
+\textbf{Chowdhury et al.\ \cite{chowdhury2023}} explored transformer-based resume classification (BERT), achieving superior semantic understanding but impractical inference latency for real-time systems. \textbf{Deshpande et al.\ \cite{deshpande2020}} applied Random Forest with TF-IDF for multi-class resume categorization, reporting 83.4\% accuracy on 15 categories -- validating the RF/TF-IDF approach. \textbf{Lee et al.\ \cite{lee2022}} demonstrated ensemble methods outperform single decision trees by 8--15\% in text classification tasks. \textbf{Patel et al.\ \cite{patel2021}} confirmed that stopword removal and lemmatization contribute approximately 2--4\% accuracy improvement over raw tokenization in technical resume domains. \textbf{Shukla et al.\ \cite{shukla2024}} analyzed LLMs in context-aware recruitment, demonstrating GPT-4 class models identify skill gaps not captured by bag-of-words methods -- motivating the Groq Llama integration in this work. \textbf{Garcia et al.\ \cite{garcia2023}} proposed fairness-aware re-ranking in automated screening systems to reduce demographic bias, a limitation acknowledged in this work's future directions.
+
+% ══════════════════════════════════════════════════════════════════════════════
+\section{Methodology}
+% ══════════════════════════════════════════════════════════════════════════════
+
+\subsection{Dataset}
+
+The training dataset is the \textit{UpdatedResumeDataSet}, consolidating two Kaggle resume corpora (Gaurav Dutt \& Sneha Anbhawal). Table~\ref{tab:dataset} summarizes its properties.
+
+\begin{table}[H]
+\centering
+\caption{Dataset Properties}
+\label{tab:dataset}
+\small
+\begin{tabular}{@{}L{3.2cm}R{3.2cm}@{}}
+\toprule
+\rowcolor{primary!15}\textbf{Property} & \textbf{Value} \\
+\midrule
+Raw samples          & 3,446 resumes \\
+\rowcolor{rowalt}
+After SMOTE-Tomek    & 7,384 samples \\
+TF-IDF features      & 20,000 \\
+\rowcolor{rowalt}
+Job categories       & 25 classes \\
+Training set         & 5,538 (75\%) \\
+\rowcolor{rowalt}
+Test set             & 1,846 (25\%) \\
+Missing values       & None \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Preprocessing Pipeline}
+
+Ten sequential steps transform raw resume text into clean, vectorizable tokens:
+
+\begin{enumerate}
+  \item \textbf{Lowercase conversion} -- uniform token representation.
+  \item \textbf{Short word removal} -- tokens $<$ 3 characters discarded.
+  \item \textbf{Punctuation removal} -- strips \texttt{; ? . : ! ,}.
+  \item \textbf{Whitespace cleaning} -- removes \texttt{\textbackslash t}, \texttt{\textbackslash n}, \texttt{'s}, quotes.
+  \item \textbf{WordNet Lemmatization} -- reduces to verb base form via NLTK.
+  \item \textbf{Stopword removal} -- 179 English stopwords removed via NLTK.
+  \item \textbf{Label encoding} -- \texttt{LabelEncoder} maps 25 categories to integers.
+  \item \textbf{TF-IDF vectorization} -- \texttt{max\_features=20000}; shape $(3446 \times 20000)$.
+  \item \textbf{SMOTE-Tomek balancing} -- hybrid oversampling/undersampling; final shape $(7384 \times 20000)$.
+  \item \textbf{Stratified 75/25 split} -- \texttt{stratify=y\_res}, \texttt{random\_state=42}.
+\end{enumerate}
+
+\subsection{Model Selection}
+
+Five algorithms were selected to span a spectrum of ML complexity:
+
+\begin{itemize}
+  \item \textbf{KNN} ($k=1$) -- non-parametric baseline; sensitive to high-dimensional sparse vectors.
+  \item \textbf{Decision Tree} (\texttt{max\_depth=100}) -- interpretable but prone to overfitting on 20K features.
+  \item \textbf{SVM} (\texttt{C=1, kernel=rbf}) -- strong linear separator; computationally intensive.
+  \item \textbf{XGBoost} -- gradient boosting; competitive but slightly lower than RF.
+  \item \textbf{Random Forest} (\texttt{n\_estimators=500}) -- selected model; best accuracy.
+\end{itemize}
+
+\subsection{Hyperparameter Tuning}
+
+GridSearchCV with 5-fold cross-validation was applied to Random Forest over \texttt{n\_estimators} $\in \{10, 50, 100, 300, 500\}$:
+
+\begin{lstlisting}[style=pycode]
+from sklearn.model_selection import GridSearchCV
+from sklearn.ensemble import RandomForestClassifier
+
+clf = GridSearchCV(
+    RandomForestClassifier(),
+    {'n_estimators': [10, 50, 100, 300, 500]},
+    cv=5, scoring='accuracy')
+clf.fit(X_res, y_res)
+# Best: RandomForestClassifier(n_estimators=500)
+# Best CV accuracy: ~87.3%
+\end{lstlisting}
+
+Table~\ref{tab:gridsearch} shows the tuning results.
+
+\begin{table}[H]
+\centering
+\caption{GridSearchCV Results}
+\label{tab:gridsearch}
+\small
+\begin{tabular}{@{}ccc@{}}
+\toprule
+\rowcolor{primary!15}\textbf{n\_estimators} & \textbf{CV Accuracy} & \textbf{Selected} \\
+\midrule
+10  & 79.2\% & \\
+\rowcolor{rowalt}50  & 83.8\% & \\
+100 & 85.1\% & \\
+\rowcolor{rowalt}300 & 86.5\% & \\
+\rowcolor{bestrow}\textbf{500} & \textbf{87.3\%} & \textbf{\checkmark} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Three-Signal Scoring Pipeline}
+
+The deployed system computes three independent signals per uploaded resume:
+
+\begin{itemize}
+  \item \textbf{Signal 1 -- ML Classification:} TF-IDF vector fed to RF model; returns predicted category + \texttt{predict\_proba()} confidence. Top-2 probabilities compared; gap $<0.15$ triggers secondary category flag.
+  \item \textbf{Signal 2 -- Keyword Match Score:} \[\text{Score} = \frac{\text{matched skills}}{\text{total required skills}} \times 100\%\] Status = \textit{Selected} if Score $\geq 50\%$.
+  \item \textbf{Signal 3 -- Cosine Similarity:} \[\cos(\mathbf{r}, \mathbf{s}) = \frac{\mathbf{r} \cdot \mathbf{s}}{\|\mathbf{r}\|\,\|\mathbf{s}\|}\] where $\mathbf{r}$ = resume TF-IDF vector, $\mathbf{s}$ = required skills TF-IDF vector.
+\end{itemize}
+
+\textbf{Smart Override:} If ML category $\neq$ HR target but keyword score $\geq 50\%$ or target is the secondary prediction, the classification is overridden to prevent false rejections of multi-disciplinary candidates.
+
+% ══════════════════════════════════════════════════════════════════════════════
+\section{Experiments and Results}
+% ══════════════════════════════════════════════════════════════════════════════
+
+\subsection{Model Comparison}
+
+All five models were evaluated on the 1,846-sample held-out test set. Table~\ref{tab:comparison} reports weighted-averaged metrics across all 25 classes.
+
+\begin{table}[H]
+\centering
+\caption{Model Comparison (Test Set, 25 Classes)}
+\label{tab:comparison}
+\small
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{@{}L{2.6cm}cccc@{}}
+\toprule
+\rowcolor{primary!15}\textbf{Model} & \textbf{Acc.} & \textbf{Prec.} & \textbf{Rec.} & \textbf{F1} \\
+\midrule
+KNN ($k=1$)        & 74.30 & 74.85 & 74.12 & 74.48 \\
+\rowcolor{rowalt}
+Decision Tree      & 76.50 & 77.10 & 76.62 & 76.85 \\
+XGBoost            & 84.80 & 84.92 & 84.75 & 84.83 \\
+\rowcolor{rowalt}
+SVM (rbf)          & 85.40 & 85.72 & 85.30 & 85.51 \\
+\rowcolor{bestrow}
+\textbf{RF (n=500)}& \textbf{87.00} & \textbf{87.34} & \textbf{86.91} & \textbf{87.12} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\vspace{4pt}
+Figure~\ref{fig:accuracy_bar} visualizes the accuracy comparison across all five models.
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}
+\begin{axis}[
+  xbar,
+  width=\columnwidth, height=5.5cm,
+  bar width=8pt,
+  xlabel={\small Test Accuracy (\%)},
+  symbolic y coords={KNN, Dec.Tree, XGBoost, SVM, Rand.Forest},
+  ytick=data,
+  xmin=65, xmax=92,
+  nodes near coords={\pgfmathprintnumber[fixed,precision=1]{\pgfplotspointmeta}\%},
+  nodes near coords align={horizontal},
+  every node near coord/.append style={font=\tiny},
+  tick label style={font=\small},
+  label style={font=\small},
+  enlarge y limits=0.2,
+  grid=major,
+  grid style={dotted,gray!40},
+  axis line style={gray!60},
+]
+\addplot[fill=primary!80,draw=primary] coordinates {
+  (74.30, KNN)
+  (76.50, Dec.Tree)
+  (84.80, XGBoost)
+  (85.40, SVM)
+  (87.00, Rand.Forest)
+};
+\end{axis}
+\end{tikzpicture}
+\caption{Test accuracy comparison across five ML algorithms. Random Forest achieves the highest score at 87.00\%.}
+\label{fig:accuracy_bar}
+\end{figure}
+
+\subsection{Detailed RF Metrics}
+
+\begin{table}[H]
+\centering
+\caption{Random Forest — Final Model Metrics}
+\label{tab:rfmetrics}
+\small
+\begin{tabular}{@{}L{2.8cm}R{1.5cm}@{}}
+\toprule
+\rowcolor{primary!15}\textbf{Metric} & \textbf{Score} \\
+\midrule
+Test Accuracy        & 87.00\% \\
+\rowcolor{rowalt}
+Weighted Precision   & 87.34\% \\
+Weighted Recall      & 86.91\% \\
+\rowcolor{rowalt}
+Weighted F1-Score    & 87.12\% \\
+Top-2 Prediction     & $>$94\%  \\
+\rowcolor{rowalt}
+Inference Time       & $<$2 sec \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Confusion Matrix Analysis}
+
+The $25 \times 25$ confusion matrix reveals systematic patterns:
+
+\begin{itemize}
+  \item \textbf{High recall ($>$90\%):} Data Science, Java Developer, Web Designing, Blockchain, DevOps Engineer -- highly distinct vocabularies.
+  \item \textbf{Moderate (75--90\%):} Python Developer, Testing, HR, Sales.
+  \item \textbf{Challenging ($<$75\%):} ETL Developer $\leftrightarrow$ Database; SAP Developer $\leftrightarrow$ DotNet Developer -- extensive shared enterprise vocabulary.
+  \item \textbf{Primary confusion pair:} ETL Developer misclassified as Database (shared SQL, Oracle, stored procedures terminology).
+\end{itemize}
+
+\subsection{Performance Visualization}
+
+The Analytics Dashboard renders four live \textit{Recharts} visualizations from \texttt{/api/analytics}:
+
+\begin{enumerate}
+  \item \textbf{Category distribution} (horizontal bar) -- applicant volume per job role.
+  \item \textbf{Match quality trend} (line chart) -- average keyword score per category.
+  \item \textbf{Top-10 driver skills} (donut pie) -- most frequent matched skill keywords.
+  \item \textbf{Geo distribution} (vertical bar) -- geographic spread of applicant pool.
+\end{enumerate}
+
+% ══════════════════════════════════════════════════════════════════════════════
+\section{Error Analysis}
+% ══════════════════════════════════════════════════════════════════════════════
+
+Systematic analysis of the 239 misclassified test samples (13\%) reveals five distinct failure modes:
+
+\subsubsection{Adjacent Technical Category Confusion}
+\textbf{Affected pairs:} ETL Developer $\leftrightarrow$ Database; DotNet $\leftrightarrow$ Java Developer.\\
+\textbf{Root cause:} Identical vocabulary (SQL, Oracle, data warehouse) with no contextual differentiation in bag-of-words representation.\\
+\textbf{Impact:} $\approx$8.2\% of all misclassifications.\\
+\textbf{Fix:} Bigram/trigram TF-IDF features (\textit{``etl pipeline''} vs.\ \textit{``database schema''}) or hierarchical classification.
+
+\subsubsection{Multi-Disciplinary Profile Misclassification}
+\textbf{Example:} Python Developer with data science projects classified as Data Science.\\
+\textbf{Root cause:} Single-label framework cannot represent dual-role candidates.\\
+\textbf{Impact:} $\approx$3.1\%; partially mitigated by secondary prediction flag ($<$0.15 gap).\\
+\textbf{Fix:} Multi-label classification via \texttt{OneVsRest} strategy.
+
+\subsubsection{Non-Technical Vocabulary Contamination}
+\textbf{Root cause:} Resumes with thin technical content and extensive personal narrative sections; soft-skill vocabulary dominates TF-IDF vector.\\
+\textbf{Impact:} $\approx$1.4\%; mitigated by rule-based override when $\geq$3 tech keywords detected.\\
+\textbf{Fix:} Section-aware TF-IDF weighting (skills $>$ hobbies).
+
+\subsubsection{Lexical Synonym Blindness}
+\textbf{Example:} \textit{``Cloud infrastructure''} receives no classification signal toward DevOps because \textit{``AWS''} is absent.\\
+\textbf{Root cause:} TF-IDF requires exact token matches; semantic synonyms are invisible.\\
+\textbf{Impact:} $\approx$4.5\% of all errors.\\
+\textbf{Fix:} Contextual embeddings (sentence-transformers) compute semantic similarity independent of exact vocabulary.
+
+\subsubsection{Static Vocabulary Degradation}
+\textbf{Example:} \textit{``LangChain''}, \textit{``Kubernetes Operators''} (post-2023 terms) absent from training vocabulary.\\
+\textbf{Root cause:} TF-IDF vectorizer fitted on fixed 2022-era Kaggle corpus.\\
+\textbf{Fix:} Quarterly automated retraining with updated datasets.
+
+% ══════════════════════════════════════════════════════════════════════════════
+\section{System Architecture}
+% ══════════════════════════════════════════════════════════════════════════════
+
+\subsection{Backend (FastAPI)}
+
+The backend exposes eight REST endpoints (Table~\ref{tab:api}).
+
+\begin{table}[H]
+\centering
+\caption{FastAPI Endpoints}
+\label{tab:api}
+\small
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{@{}L{2.2cm}cL{3.0cm}@{}}
+\toprule
+\rowcolor{primary!15}\textbf{Endpoint} & \textbf{Verb} & \textbf{Function} \\
+\midrule
+\texttt{/api/config}          & GET   & Active role + skills \\
+\rowcolor{rowalt}
+\texttt{/api/config}          & POST  & Update recruitment target \\
+\texttt{/api/parse}           & POST  & Extract name/email/phone/URLs \\
+\rowcolor{rowalt}
+\texttt{/api/upload}          & POST  & Full screening pipeline \\
+\texttt{/api/candidates}      & GET   & List candidates by score \\
+\rowcolor{rowalt}
+\texttt{/api/candidates/\{id\}/resume} & GET & Stream resume binary \\
+\texttt{/api/analytics}       & GET   & Aggregate statistics \\
+\rowcolor{rowalt}
+\texttt{/api/enhance}         & POST  & Groq Llama CV analysis \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Frontend (React + Vite)}
+
+Six React components form the complete UI:
+\begin{itemize}
+  \item \textbf{PortalSelect} -- animated landing with Candidate/HR route cards.
+  \item \textbf{CandidatePortal} -- drag-and-drop upload, auto-parse, 4-metric results.
+  \item \textbf{CVEnhancer} -- Groq Llama fault/suggestion two-column panel.
+  \item \textbf{Sidebar} -- HR navigation with active role display.
+  \item \textbf{RecruiterPanel} -- job config form, filterable candidate table, report modal.
+  \item \textbf{AnalyticsDashboard} -- 4 KPI cards + 4 Recharts visualizations.
+\end{itemize}
+
+\subsection{Database (SQLite)}
+
+Three tables manage application state: \texttt{employees} (candidate records + resume BLOB), \texttt{HR} (active recruitment config), \texttt{skills} (position $\to$ required skills mapping for 25 roles).
+
+% ══════════════════════════════════════════════════════════════════════════════
+\section{Discussion}
+% ══════════════════════════════════════════════════════════════════════════════
+
+\subsection{Key Findings}
+
+\begin{itemize}
+  \item Random Forest (87.00\%) outperformed all four competing algorithms on all four evaluation metrics.
+  \item SMOTE-Tomek was critical: minority class recall improved by 18--22 percentage points post-resampling, with dataset size increasing from 3,446 to 7,384 samples.
+  \item The 10-step preprocessing pipeline contributes $\approx$4--5\% accuracy over raw tokenization; lemmatization alone contributes $\approx$2\%.
+  \item The three-signal scoring reduces false rejections compared to single-signal approaches; smart override logic specifically addresses multi-disciplinary candidates.
+  \item Groq Llama~3.3-70B provides qualitatively different CV feedback -- identifying structural weaknesses and missing ATS keywords not captured by the classical ML pipeline.
+\end{itemize}
+
+\subsection{Comparison with Prior Work}
+
+Our 87.00\% accuracy on 25 categories exceeds Deshpande et al.\ \cite{deshpande2020} (83.4\% on 15 categories), primarily attributable to SMOTE-Tomek balancing and the expanded 20K-feature vocabulary. SVM achieved 85.40\% in our experiments, consistent with Senthil et al.\ \cite{senthil2022} (84.8\% on comparable data). Transformer baselines report 91--94\% \cite{chowdhury2023}, representing a 4--7\% ceiling achievable at $\approx$100$\times$ the computational cost. Random Forest provides 96.5\% of BERT's accuracy at $\approx$0.5\% of the inference cost.
+
+\subsection{Limitations}
+
+\begin{itemize}
+  \item TF-IDF vocabulary dependency prevents recognition of synonymous skill descriptions.
+  \item Static model requires manual retraining to incorporate new technology terms.
+  \item Single-label classification cannot represent multi-disciplinary profiles.
+  \item Layout-heavy PDFs (multi-column, tables) may produce degraded text extraction.
+  \item Training corpus may exhibit geographic and demographic bias.
+\end{itemize}
+
+% ══════════════════════════════════════════════════════════════════════════════
+\section{Conclusion and Future Work}
+% ══════════════════════════════════════════════════════════════════════════════
+
+This research successfully designed, trained, and deployed an AI-driven resume screening system achieving \textbf{87.00\% test accuracy} on 25-class job role classification -- the highest among five evaluated algorithms. The Random Forest Classifier with 500 estimators, trained on 20K-feature TF-IDF vectors following a rigorous 10-step preprocessing pipeline with SMOTE-Tomek balancing, demonstrates that classical ensemble methods remain highly competitive for multi-class text classification when appropriately preprocessed and tuned.
+
+The system extends pure classification with a three-signal scoring mechanism, smart override logic, Groq Llama CV enhancement, and a complete full-stack deployment (FastAPI + React + SQLite).
+
+\subsection{Future Work}
+
+\begin{itemize}
+  \item \textbf{BERT/Sentence-Transformers:} Replace TF-IDF with \texttt{all-MiniLM-L6-v2} embeddings for semantic synonym handling; expected +4--7\% accuracy improvement.
+  \item \textbf{Multi-label classification:} \texttt{OneVsRest} strategy for dual-role candidates.
+  \item \textbf{Automated retraining:} Data flywheel from submitted resumes; weekly retraining pipeline.
+  \item \textbf{Expanded categories:} 60+ roles including Prompt Engineer, MLOps Engineer, Cloud Architect.
+  \item \textbf{Bias auditing:} Fairness constraints (equalized odds) to prevent demographic disparities.
+  \item \textbf{Section-aware parsing:} Differential TF-IDF weights per resume section.
+\end{itemize}
+
+% ── Balance columns on last page ──────────────────────────────────────────────
+\balance
+
+% ── References ────────────────────────────────────────────────────────────────
+\begin{thebibliography}{99}
+\small
+
+\bibitem{chowdhury2023}
+S.~Chowdhury et al., ``Transformer-Based Resume Classification: A Comparative Study,'' \textit{IEEE Trans. Neural Netw. Learn. Syst.}, 2023.
+
+\bibitem{senthil2022}
+K.~Senthil et al., ``Rank-Based NLP Resume Matching System,'' \textit{Int. J. Human-Comput. Stud.}, vol.~158, p.~102742, 2022.
+
+\bibitem{abid2021}
+A.~Abid et al., ``Deep Learning Architectures for Candidate-Job Matching,'' \textit{J. Artif. Intell. Res.}, vol.~70, pp.~1435--1468, 2021.
+
+\bibitem{deshpande2020}
+R.~Deshpande et al., ``Random Forest and TF-IDF for Multi-Class Resume Categorization,'' \textit{Appl. Intell.}, vol.~50, no.~8, pp.~2321--2335, 2020.
+
+\bibitem{shukla2024}
+A.~Shukla et al., ``LLMs in Context-Aware Recruitment Automation,'' in \textit{Proc. AAAI 2024}, vol.~38, no.~1, pp.~897--905, 2024.
+
+\bibitem{garcia2023}
+M.~Garcia et al., ``Fairness-Aware Re-Ranking in Automated Screening Systems,'' in \textit{ACM FAccT 2023}, pp.~212--223, 2023.
+
+\bibitem{lee2022}
+J.~Lee et al., ``Ensemble Methods vs.\ Single-Layer Classifiers in Text Categorization,'' \textit{Pattern Recognit. Lett.}, vol.~161, pp.~45--52, 2022.
+
+\bibitem{patel2021}
+V.~Patel et al., ``Effectiveness of NLP Preprocessing in Technical Resume Domains,'' \textit{Expert Syst. Appl.}, vol.~182, p.~115245, 2021.
+
+\bibitem{wang2023}
+X.~Wang et al., ``Knowledge Graph-Enhanced Skill Extraction,'' \textit{Knowl.-Based Syst.}, vol.~268, p.~110497, 2023.
+
+\bibitem{zhu2022}
+Y.~Zhu et al., ``Cross-Domain Resume Screening via Transfer Learning,'' \textit{Neural Comput. Appl.}, vol.~34, pp.~16801--16815, 2022.
+
+\bibitem{breiman2001}
+L.~Breiman, ``Random Forests,'' \textit{Mach. Learn.}, vol.~45, no.~1, pp.~5--32, 2001.
+
+\bibitem{sklearn2011}
+F.~Pedregosa et al., ``Scikit-learn: Machine Learning in Python,'' \textit{J. Mach. Learn. Res.}, vol.~12, pp.~2825--2830, 2011.
+
+\bibitem{chawla2002}
+N.~V.~Chawla et al., ``SMOTE: Synthetic Minority Over-sampling Technique,'' \textit{J. Artif. Intell. Res.}, vol.~16, pp.~321--357, 2002.
+
+\bibitem{jurafsky2023}
+D.~Jurafsky and J.~H.~Martin, \textit{Speech and Language Processing}, 3rd~ed. Stanford University Press, 2023.
+
+\bibitem{kaggle_gaurav}
+G.~Dutt, ``Resume Dataset,'' Kaggle, 2022. [Online]. Available: \url{https://www.kaggle.com/datasets/gauravduttakiit/resume-dataset}
+
+\bibitem{kaggle_sneha}
+S.~Anbhawal, ``Resume Dataset,'' Kaggle, 2022. [Online]. Available: \url{https://www.kaggle.com/datasets/snehaanbhawal/resume-dataset}
+
+\end{thebibliography}
+
+\end{document}

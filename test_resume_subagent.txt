@@ -1,0 +1,10 @@
+John Doe
+Python Developer
+
+Email: john.doe@example.com
+Phone: +923007654321
+GitHub: https://github.com/johndoe
+LinkedIn: linkedin.com/in/johndoe
+
+Summary:
+3 years of experience as a python developer building django applications and working with databases.
