@@ -1,66 +1,114 @@
 import { useState } from 'react';
-import { BarChart3, Users, Award, Clock, ArrowLeft } from 'lucide-react';
+import { BarChart3, Users, Award, Clock, ArrowLeft, TrendingUp, Zap } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { T, Logo } from '../theme.jsx';
 
+const ANIM = `
+@keyframes sidebarFadeIn { from{opacity:0;transform:translateX(-16px)} to{opacity:1;transform:none} }
+@keyframes indicatorGlow { 0%,100%{box-shadow:0 0 8px rgba(255,136,0,.5)} 50%{box-shadow:0 0 18px rgba(255,136,0,.9)} }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.5} }
+`;
+
 export default function Sidebar({ activeTab, setActiveTab, activeConfig }) {
   const navigate = useNavigate();
-  const [hovBtn, setHovBtn] = useState(false);
+  const [hov, setHov] = useState(null);
 
   const menuItems = [
-    { id: 'analytics', label: 'Analytics',       icon: BarChart3 },
-    { id: 'recruiter', label: 'Recruiter Panel',  icon: Users },
+    { id: 'analytics', label: 'Analytics',      icon: BarChart3, desc: 'Charts & metrics'   },
+    { id: 'recruiter', label: 'Recruiter Panel', icon: Users,     desc: 'Candidates & config' },
   ];
 
   return (
     <aside style={S.sidebar}>
+      <style>{ANIM}</style>
+
       {/* Brand */}
-      <div style={S.brand}>
-        <Logo size={34} />
-        <div style={{ fontFamily: "'Outfit',sans-serif" }}>
-          <span style={S.brandMain}>Screen</span>
-          <span style={S.brandAccent}>.AI</span>
+      <div style={{ ...S.brand, animation: 'sidebarFadeIn .5s ease both' }}>
+        <div style={S.logoWrap}>
+          <Logo size={30} />
+        </div>
+        <div style={{ fontFamily: "'Outfit',sans-serif", lineHeight: 1 }}>
+          <div style={{ fontWeight: 900, fontSize: '1.2rem', color: T.white, letterSpacing: '-.5px' }}>
+            Screen<span style={{ color: T.orange }}>.AI</span>
+          </div>
+          <div style={{ fontSize: '.65rem', color: T.greyD, fontWeight: 500, letterSpacing: '.5px', textTransform: 'uppercase', marginTop: '1px' }}>HR Portal</div>
         </div>
       </div>
 
-      {/* Divider */}
       <div style={S.divider} />
 
+      {/* Live indicator */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: '.45rem', padding: '.5rem .75rem', marginBottom: '.75rem', animation: 'sidebarFadeIn .5s ease .1s both' }}>
+        <div style={{ width: '7px', height: '7px', borderRadius: '50%', background: T.green, animation: 'pulse 2s ease-in-out infinite', boxShadow: `0 0 8px ${T.green}` }} />
+        <span style={{ fontSize: '.72rem', color: T.grey, fontWeight: 500 }}>System live</span>
+      </div>
+
       {/* Nav */}
-      <nav style={S.nav}>
-        {menuItems.map(item => {
+      <nav style={{ display: 'flex', flexDirection: 'column', gap: '.25rem' }}>
+        {menuItems.map((item, i) => {
           const Icon = item.icon;
-          const on = activeTab === item.id;
+          const on  = activeTab === item.id;
+          const hovered = hov === item.id;
           return (
             <button key={item.id} onClick={() => setActiveTab(item.id)}
-              style={{ ...S.navBtn, ...(on ? S.navBtnActive : {}) }}>
-              {on && <div style={S.indicator} />}
-              <div style={{ ...S.iconBox, background: on ? 'rgba(255,136,0,.12)' : 'transparent', border: `1px solid ${on ? 'rgba(255,136,0,.25)' : 'transparent'}` }}>
-                <Icon size={18} color={on ? T.orange : T.grey} />
+              onMouseEnter={() => setHov(item.id)}
+              onMouseLeave={() => setHov(null)}
+              style={{
+                display: 'flex', alignItems: 'center', gap: '.75rem',
+                padding: '.8rem .9rem', border: 'none', borderRadius: '12px',
+                cursor: 'pointer', position: 'relative', textAlign: 'left',
+                fontFamily: "'Outfit',sans-serif",
+                background: on ? 'linear-gradient(135deg,rgba(255,136,0,.1),rgba(255,136,0,.04))' : hovered ? 'rgba(255,255,255,.03)' : 'transparent',
+                border: `1px solid ${on ? 'rgba(255,136,0,.2)' : 'transparent'}`,
+                transition: 'all .2s cubic-bezier(.4,0,.2,1)',
+                animation: `sidebarFadeIn .4s ease ${.15 + i * .08}s both`,
+                boxShadow: on ? '0 4px 20px rgba(255,136,0,.08)' : 'none',
+              }}>
+              {on && <div style={{ position: 'absolute', left: 0, top: '20%', height: '60%', width: '3px', background: T.orange, borderRadius: '0 3px 3px 0', animation: 'indicatorGlow 2s ease-in-out infinite' }} />}
+              <div style={{ width: '36px', height: '36px', borderRadius: '10px', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', background: on ? 'rgba(255,136,0,.15)' : hovered ? 'rgba(255,255,255,.05)' : 'rgba(255,255,255,.03)', border: `1px solid ${on ? 'rgba(255,136,0,.3)' : 'rgba(255,255,255,.06)'}`, transition: 'all .2s' }}>
+                <Icon size={17} color={on ? T.orange : hovered ? T.offW : T.grey} />
               </div>
-              <span style={{ color: on ? T.white : T.grey, transition: 'color .2s' }}>{item.label}</span>
+              <div>
+                <div style={{ fontSize: '.9rem', fontWeight: on ? 700 : 500, color: on ? T.white : hovered ? T.offW : T.grey, transition: 'color .2s', lineHeight: 1.2 }}>{item.label}</div>
+                <div style={{ fontSize: '.68rem', color: T.greyD, marginTop: '1px' }}>{item.desc}</div>
+              </div>
             </button>
           );
         })}
       </nav>
 
-      {/* Spacer */}
       <div style={{ flexGrow: 1 }} />
 
-      {/* Active config card */}
+      {/* Quick stats */}
       {activeConfig && (
-        <div style={S.configCard}>
-          <div style={S.configTag}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '.5rem', marginBottom: '.75rem', animation: 'sidebarFadeIn .5s ease .35s both' }}>
+          <div style={{ fontSize: '.68rem', color: T.greyD, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '.6px', padding: '0 .25rem' }}>Quick Stats</div>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '.4rem' }}>
+            {[
+              { icon: TrendingUp, label: 'Role',   val: activeConfig.position ? activeConfig.position.split(' ')[0] : '—', color: T.orange },
+              { icon: Zap,        label: 'Min Exp', val: activeConfig.experience > 0 ? `${activeConfig.experience}y` : 'Any', color: T.orangeL },
+            ].map(st => (
+              <div key={st.label} style={{ background: T.bgCard2, border: `1px solid ${T.line}`, borderRadius: '10px', padding: '.6rem .7rem' }}>
+                <div style={{ fontSize: '.62rem', color: T.greyD, textTransform: 'uppercase', letterSpacing: '.5px', fontWeight: 600 }}>{st.label}</div>
+                <div style={{ fontSize: '.88rem', fontWeight: 800, color: st.color, marginTop: '2px', fontFamily: "'Outfit',sans-serif", letterSpacing: '-.3px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{st.val}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Active config card */}
+      {activeConfig?.position && (
+        <div style={{ background: 'linear-gradient(135deg,rgba(255,136,0,.08),rgba(255,136,0,.03))', border: `1px solid rgba(255,136,0,.2)`, borderRadius: '14px', padding: '1rem', marginBottom: '.75rem', animation: 'sidebarFadeIn .5s ease .4s both' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '.35rem', marginBottom: '.4rem' }}>
             <Award size={12} color={T.orange} />
             <span style={{ color: T.orange, fontSize: '10px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '.6px' }}>Active Target</span>
           </div>
-          <div style={{ color: T.white, fontWeight: 700, fontSize: '1rem', marginTop: '.35rem' }}>
-            {activeConfig.position || 'Not Set'}
-          </div>
+          <div style={{ color: T.white, fontWeight: 800, fontSize: '.95rem', lineHeight: 1.3 }}>{activeConfig.position}</div>
           {activeConfig.experience > 0 && (
-            <div style={{ display: 'flex', alignItems: 'center', gap: '.3rem', marginTop: '.3rem' }}>
-              <Clock size={11} color={T.grey} />
-              <span style={{ color: T.grey, fontSize: '12px' }}>≥ {activeConfig.experience} yrs experience</span>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '.3rem', marginTop: '.35rem' }}>
+              <Clock size={10} color={T.greyD} />
+              <span style={{ color: T.greyD, fontSize: '.72rem' }}>Min {activeConfig.experience} yr{activeConfig.experience !== 1 ? 's' : ''}</span>
             </div>
           )}
         </div>
@@ -68,13 +116,12 @@ export default function Sidebar({ activeTab, setActiveTab, activeConfig }) {
 
       <div style={S.divider} />
 
-      {/* Back button */}
+      {/* Back */}
       <button onClick={() => navigate('/')}
-        onMouseEnter={() => setHovBtn(true)}
-        onMouseLeave={() => setHovBtn(false)}
-        style={{ ...S.backBtn, borderColor: hovBtn ? T.lineO : T.line, color: hovBtn ? T.offW : T.grey }}>
-        <ArrowLeft size={14} color={hovBtn ? T.orangeL : T.grey} />
-        <span>Back to Home</span>
+        onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,136,0,.06)'; e.currentTarget.style.borderColor = T.lineO; e.currentTarget.style.color = T.white; }}
+        onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.borderColor = T.line; e.currentTarget.style.color = T.grey; }}
+        style={{ display: 'flex', alignItems: 'center', gap: '.5rem', padding: '.65rem 1rem', background: 'transparent', border: `1px solid ${T.line}`, borderRadius: '10px', fontSize: '.82rem', fontWeight: 500, cursor: 'pointer', fontFamily: "'Outfit',sans-serif", color: T.grey, transition: 'all .2s', width: '100%', animation: 'sidebarFadeIn .5s ease .45s both' }}>
+        <ArrowLeft size={14} /> Back to Home
       </button>
     </aside>
   );
@@ -82,42 +129,14 @@ export default function Sidebar({ activeTab, setActiveTab, activeConfig }) {
 
 const S = {
   sidebar: {
-    width: '260px', flexShrink: 0,
+    width: '240px', flexShrink: 0,
     background: T.bgCard,
     borderRight: `1px solid ${T.line}`,
     display: 'flex', flexDirection: 'column',
-    padding: '1.75rem 1.25rem',
+    padding: '1.5rem 1.1rem',
     height: '100vh', position: 'sticky', top: 0, zIndex: 100,
   },
-  brand: { display: 'flex', alignItems: 'center', gap: '.65rem', marginBottom: '1.5rem' },
-  brandMain: { fontWeight: 800, fontSize: '1.3rem', color: T.white, letterSpacing: '-.4px' },
-  brandAccent: { fontWeight: 800, fontSize: '1.3rem', color: T.orange },
-  divider: { height: '1px', background: T.line, margin: '.75rem 0' },
-  nav: { display: 'flex', flexDirection: 'column', gap: '.3rem', marginTop: '.5rem' },
-  navBtn: {
-    display: 'flex', alignItems: 'center', gap: '.75rem',
-    padding: '.7rem .85rem', background: 'transparent', border: 'none',
-    borderRadius: '10px', cursor: 'pointer', position: 'relative',
-    fontFamily: "'Outfit',sans-serif", fontSize: '.92rem', fontWeight: 500,
-    textAlign: 'left', transition: 'background .2s',
-  },
-  navBtnActive: { background: 'rgba(255,136,0,.06)' },
-  indicator: {
-    position: 'absolute', left: 0, top: '20%', height: '60%',
-    width: '3px', background: T.orange, borderRadius: '0 3px 3px 0',
-    boxShadow: `0 0 10px rgba(255,136,0,.6)`,
-  },
-  iconBox: { width: '32px', height: '32px', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all .2s', flexShrink: 0 },
-  configCard: {
-    background: T.bgCard2, border: `1px solid ${T.lineO}`,
-    borderRadius: '12px', padding: '1rem', marginBottom: '.75rem',
-  },
-  configTag: { display: 'flex', alignItems: 'center', gap: '.35rem' },
-  backBtn: {
-    display: 'flex', alignItems: 'center', gap: '.5rem',
-    padding: '.65rem 1rem', background: 'transparent',
-    border: `1px solid ${T.line}`, borderRadius: '10px',
-    fontSize: '.82rem', fontWeight: 500, cursor: 'pointer',
-    fontFamily: "'Outfit',sans-serif", transition: 'all .2s', width: '100%',
-  },
+  logoWrap: { width: '38px', height: '38px', borderRadius: '10px', background: 'rgba(255,136,0,.08)', border: `1px solid rgba(255,136,0,.15)`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 },
+  brand:   { display: 'flex', alignItems: 'center', gap: '.65rem', marginBottom: '1.25rem' },
+  divider: { height: '1px', background: T.line, margin: '.6rem 0' },
 };
