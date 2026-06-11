@@ -374,3 +374,31 @@ textarea::placeholder {
   }
 }
 
+/* ── Landing Page Responsive ── */
+@media (max-width: 768px) {
+  /* Show hamburger, hide desktop nav links + cta */
+  nav [style*="gap: 0.25rem"] { display: none !important; }
+  nav button[style*="ChevronRight"],
+  nav > button:last-of-type { display: none !important; }
+}
+
+/* Smooth scroll */
+html { scroll-behavior: smooth; }
+
+/* Landing hero responsive */
+@media (max-width: 860px) {
+  .hero-inner { flex-direction: column !important; text-align: center; }
+  .hero-text { align-items: center !important; }
+}
+
+/* Stats bar responsive */
+@media (max-width: 600px) {
+  .stats-inner { flex-direction: column !important; padding: 1.5rem !important; }
+}
+
+/* How-it-works responsive */
+@media (max-width: 860px) {
+  .how-grid { flex-direction: column !important; align-items: center !important; }
+  .how-connector { transform: rotate(90deg); }
+}
+
