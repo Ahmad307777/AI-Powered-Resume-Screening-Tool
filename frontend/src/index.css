@@ -374,12 +374,12 @@ textarea::placeholder {
   }
 }
 
-/* ── Landing Page Responsive ── */
+/* ── Landing Page ── */
 html { scroll-behavior: smooth; }
 
 @media (max-width: 768px) {
-  .nav-links { display: none !important; }
-  .nav-cta   { display: none !important; }
-  .hamburger { display: flex !important; }
+  .lp-nav-links { display: none !important; }
+  .lp-nav-cta   { display: none !important; }
+  .lp-hamburger { display: flex !important; align-items: center; }
 }
 
