@@ -1,202 +1,123 @@
-import React from 'react';
+import { useState } from 'react';
 import { BarChart3, Users, Award, Clock, ArrowLeft } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { T, Logo } from '../theme';
 
 export default function Sidebar({ activeTab, setActiveTab, activeConfig }) {
   const navigate = useNavigate();
+  const [hovBtn, setHovBtn] = useState(false);
+
   const menuItems = [
-    { id: 'analytics', label: 'Analytics Dashboard', icon: BarChart3 },
-    { id: 'recruiter', label: 'Recruiter Panel', icon: Users },
+    { id: 'analytics', label: 'Analytics',       icon: BarChart3 },
+    { id: 'recruiter', label: 'Recruiter Panel',  icon: Users },
   ];
 
   return (
-    <div style={styles.sidebar}>
-      {/* Brand logo */}
-      <div style={styles.brand}>
-        <div style={styles.brandIcon}>🔮</div>
-        <div style={styles.brandText}>
-          <span style={styles.brandMain}>Screen</span>
-          <span style={styles.brandSub}>.AI</span>
+    <aside style={S.sidebar}>
+      {/* Brand */}
+      <div style={S.brand}>
+        <Logo size={34} />
+        <div style={{ fontFamily: "'Outfit',sans-serif" }}>
+          <span style={S.brandMain}>Screen</span>
+          <span style={S.brandAccent}>.AI</span>
         </div>
       </div>
 
-      {/* Nav links */}
-      <nav style={styles.nav}>
-        {menuItems.map((item) => {
+      {/* Divider */}
+      <div style={S.divider} />
+
+      {/* Nav */}
+      <nav style={S.nav}>
+        {menuItems.map(item => {
           const Icon = item.icon;
-          const isActive = activeTab === item.id;
+          const on = activeTab === item.id;
           return (
-            <button
-              key={item.id}
-              onClick={() => setActiveTab(item.id)}
-              style={{
-                ...styles.navLink,
-                ...(isActive ? styles.navLinkActive : {}),
-              }}
-            >
-              <Icon size={20} color={isActive ? '#a855f7' : '#9ca3af'} />
-              <span>{item.label}</span>
-              {isActive && <div style={styles.activeIndicator} />}
+            <button key={item.id} onClick={() => setActiveTab(item.id)}
+              style={{ ...S.navBtn, ...(on ? S.navBtnActive : {}) }}>
+              {on && <div style={S.indicator} />}
+              <div style={{ ...S.iconBox, background: on ? 'rgba(255,136,0,.12)' : 'transparent', border: `1px solid ${on ? 'rgba(255,136,0,.25)' : 'transparent'}` }}>
+                <Icon size={18} color={on ? T.orange : T.grey} />
+              </div>
+              <span style={{ color: on ? T.white : T.grey, transition: 'color .2s' }}>{item.label}</span>
             </button>
           );
         })}
       </nav>
 
-      {/* Back to portal select */}
-      <button
-        onClick={() => navigate('/')}
-        style={styles.backBtn}
-      >
-        <ArrowLeft size={15} color="#6b7280" />
-        <span>Switch Portal</span>
-      </button>
+      {/* Spacer */}
+      <div style={{ flexGrow: 1 }} />
 
-      {/* Config summary card at footer */}
+      {/* Active config card */}
       {activeConfig && (
-        <div style={styles.footerConfig}>
-          <div style={styles.configHeader}>
-            <Award size={14} color="#10b981" />
-            <span style={styles.configHeaderText}>Active Recruitment Target</span>
+        <div style={S.configCard}>
+          <div style={S.configTag}>
+            <Award size={12} color={T.orange} />
+            <span style={{ color: T.orange, fontSize: '10px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '.6px' }}>Active Target</span>
           </div>
-          <div style={styles.configRole}>{activeConfig.position || 'Not Set'}</div>
+          <div style={{ color: T.white, fontWeight: 700, fontSize: '1rem', marginTop: '.35rem' }}>
+            {activeConfig.position || 'Not Set'}
+          </div>
           {activeConfig.experience > 0 && (
-            <div style={styles.configExp}>
-              <Clock size={12} color="#9ca3af" />
-              <span>≥ {activeConfig.experience} Years Exp Required</span>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '.3rem', marginTop: '.3rem' }}>
+              <Clock size={11} color={T.grey} />
+              <span style={{ color: T.grey, fontSize: '12px' }}>≥ {activeConfig.experience} yrs experience</span>
             </div>
           )}
         </div>
       )}
-    </div>
+
+      <div style={S.divider} />
+
+      {/* Back button */}
+      <button onClick={() => navigate('/')}
+        onMouseEnter={() => setHovBtn(true)}
+        onMouseLeave={() => setHovBtn(false)}
+        style={{ ...S.backBtn, borderColor: hovBtn ? T.lineO : T.line, color: hovBtn ? T.offW : T.grey }}>
+        <ArrowLeft size={14} color={hovBtn ? T.orangeL : T.grey} />
+        <span>Back to Home</span>
+      </button>
+    </aside>
   );
 }
 
-const styles = {
+const S = {
   sidebar: {
-    width: '280px',
-    backgroundColor: '#11131c',
-    borderRight: '1px solid rgba(255, 255, 255, 0.08)',
-    display: 'flex',
-    flexDirection: 'column',
-    padding: '2rem 1.5rem',
-    height: '100vh',
-    position: 'sticky',
-    top: 0,
-    zIndex: 100,
+    width: '260px', flexShrink: 0,
+    background: T.bgCard,
+    borderRight: `1px solid ${T.line}`,
+    display: 'flex', flexDirection: 'column',
+    padding: '1.75rem 1.25rem',
+    height: '100vh', position: 'sticky', top: 0, zIndex: 100,
   },
-  brand: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: '0.75rem',
-    marginBottom: '3rem',
-    paddingLeft: '0.5rem',
+  brand: { display: 'flex', alignItems: 'center', gap: '.65rem', marginBottom: '1.5rem' },
+  brandMain: { fontWeight: 800, fontSize: '1.3rem', color: T.white, letterSpacing: '-.4px' },
+  brandAccent: { fontWeight: 800, fontSize: '1.3rem', color: T.orange },
+  divider: { height: '1px', background: T.line, margin: '.75rem 0' },
+  nav: { display: 'flex', flexDirection: 'column', gap: '.3rem', marginTop: '.5rem' },
+  navBtn: {
+    display: 'flex', alignItems: 'center', gap: '.75rem',
+    padding: '.7rem .85rem', background: 'transparent', border: 'none',
+    borderRadius: '10px', cursor: 'pointer', position: 'relative',
+    fontFamily: "'Outfit',sans-serif", fontSize: '.92rem', fontWeight: 500,
+    textAlign: 'left', transition: 'background .2s',
   },
-  brandIcon: {
-    fontSize: '2rem',
-    textShadow: '0 0 10px rgba(139, 92, 246, 0.4)',
+  navBtnActive: { background: 'rgba(255,136,0,.06)' },
+  indicator: {
+    position: 'absolute', left: 0, top: '20%', height: '60%',
+    width: '3px', background: T.orange, borderRadius: '0 3px 3px 0',
+    boxShadow: `0 0 10px rgba(255,136,0,.6)`,
   },
-  brandText: {
-    display: 'flex',
-    alignItems: 'baseline',
-    fontFamily: "'Outfit', sans-serif",
+  iconBox: { width: '32px', height: '32px', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all .2s', flexShrink: 0 },
+  configCard: {
+    background: T.bgCard2, border: `1px solid ${T.lineO}`,
+    borderRadius: '12px', padding: '1rem', marginBottom: '.75rem',
   },
-  brandMain: {
-    fontWeight: '800',
-    fontSize: '1.4rem',
-    letterSpacing: '-0.5px',
-    color: '#fff',
-  },
-  brandSub: {
-    fontWeight: '800',
-    fontSize: '1.4rem',
-    color: '#a855f7',
-  },
-  nav: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '0.5rem',
-    flexGrow: 1,
-  },
-  navLink: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: '1rem',
-    padding: '0.85rem 1rem',
-    backgroundColor: 'transparent',
-    border: 'none',
-    borderRadius: '10px',
-    color: '#9ca3af',
-    fontFamily: "'Outfit', sans-serif",
-    fontSize: '0.95rem',
-    fontWeight: '500',
-    textAlign: 'left',
-    cursor: 'pointer',
-    position: 'relative',
-    transition: 'all 0.2s ease',
-  },
-  navLinkActive: {
-    backgroundColor: 'rgba(139, 92, 246, 0.08)',
-    color: '#fff',
-    fontWeight: '600',
-  },
-  activeIndicator: {
-    position: 'absolute',
-    left: 0,
-    top: '25%',
-    height: '50%',
-    width: '4px',
-    backgroundColor: '#a855f7',
-    borderRadius: '0 4px 4px 0',
-    boxShadow: '0 0 10px rgba(139, 92, 246, 0.8)',
-  },
-  footerConfig: {
-    background: 'rgba(255, 255, 255, 0.02)',
-    border: '1px solid rgba(255, 255, 255, 0.06)',
-    borderRadius: '12px',
-    padding: '1rem',
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '0.5rem',
-  },
-  configHeader: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: '0.4rem',
-  },
-  configHeaderText: {
-    fontSize: '11px',
-    textTransform: 'uppercase',
-    color: '#10b981',
-    fontWeight: '700',
-    letterSpacing: '0.5px',
-  },
-  configRole: {
-    fontSize: '16px',
-    fontWeight: '700',
-    color: '#fff',
-  },
-  configExp: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: '0.3rem',
-    fontSize: '12px',
-    color: '#9ca3af',
-  },
+  configTag: { display: 'flex', alignItems: 'center', gap: '.35rem' },
   backBtn: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: '0.5rem',
-    padding: '0.6rem 1rem',
-    marginBottom: '0.75rem',
-    background: 'transparent',
-    border: '1px solid rgba(255,255,255,0.06)',
-    borderRadius: '8px',
-    color: '#6b7280',
-    fontSize: '0.82rem',
-    fontWeight: 500,
-    cursor: 'pointer',
-    fontFamily: "'Outfit', sans-serif",
-    transition: 'all 0.2s ease',
-    width: '100%',
+    display: 'flex', alignItems: 'center', gap: '.5rem',
+    padding: '.65rem 1rem', background: 'transparent',
+    border: `1px solid ${T.line}`, borderRadius: '10px',
+    fontSize: '.82rem', fontWeight: 500, cursor: 'pointer',
+    fontFamily: "'Outfit',sans-serif", transition: 'all .2s', width: '100%',
   },
 };

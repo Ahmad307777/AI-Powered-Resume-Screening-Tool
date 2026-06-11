@@ -1,36 +1,33 @@
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap');
 
 :root {
   --font-sans: 'Outfit', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  
-  /* Color Palette - Vibrant Purple/Indigo Glow */
-  --bg-primary: #0a0b10;
-  --bg-secondary: #11131c;
-  --bg-card: rgba(255, 255, 255, 0.03);
-  --bg-hover: rgba(255, 255, 255, 0.06);
-  --border-color: rgba(255, 255, 255, 0.08);
-  --border-glow: rgba(139, 92, 246, 0.3);
-  
-  --color-text-main: #f3f4f6;
-  --color-text-muted: #9ca3af;
-  --color-text-dark: #6b7280;
-  
-  --accent-purple: #8b5cf6;
-  --accent-pink: #ec4899;
-  --accent-cyan: #06b6d4;
-  --accent-green: #10b981;
-  --accent-red: #ef4444;
-  --accent-orange: #f59e0b;
-  
-  --gradient-primary: linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%);
-  --gradient-cyan-blue: linear-gradient(135deg, #06b6d4 0%, #3b82f6 100%);
-  --gradient-green-emerald: linear-gradient(135deg, #10b981 0%, #059669 100%);
-  --gradient-rose-red: linear-gradient(135deg, #f43f5e 0%, #e11d48 100%);
-  --gradient-glass: linear-gradient(135deg, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0.01) 100%);
-  
-  --shadow-lg: 0 10px 30px -10px rgba(0, 0, 0, 0.7);
-  --shadow-neon: 0 0 20px rgba(139, 92, 246, 0.15);
-  
+
+  /* ── Orange / Black / White theme ── */
+  --bg-primary:    #080808;
+  --bg-secondary:  #0f0f0f;
+  --bg-card:       rgba(255, 255, 255, 0.03);
+  --bg-hover:      rgba(255, 255, 255, 0.05);
+  --border-color:  rgba(255, 255, 255, 0.08);
+  --border-glow:   rgba(255, 136, 0, 0.3);
+
+  --color-text-main:  #f0f0f0;
+  --color-text-muted: #888888;
+  --color-text-dark:  #444444;
+
+  --accent-orange:  #ff8800;
+  --accent-orangeL: #ffaa33;
+  --accent-green:   #22c55e;
+  --accent-red:     #ef4444;
+  --accent-amber:   #f59e0b;
+
+  --gradient-primary:  linear-gradient(135deg, #ff8800, #ffaa33);
+  --gradient-text:     linear-gradient(90deg, #ff8800, #ffcc55);
+  --gradient-glass:    linear-gradient(135deg, rgba(255,255,255,.03) 0%, rgba(255,255,255,.01) 100%);
+
+  --shadow-lg:   0 10px 30px -10px rgba(0,0,0,.8);
+  --shadow-neon: 0 0 20px rgba(255,136,0,.15);
+
   --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -41,7 +38,7 @@
 }
 
 body {
-  background-color: var(--bg-primary);
+  background-color: #080808;
   color: var(--color-text-main);
   font-family: var(--font-sans);
   min-height: 100vh;
@@ -64,9 +61,8 @@ body {
   background: var(--border-color);
   border-radius: 4px;
 }
-
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--accent-purple);
+  background: var(--accent-orange);
 }
 
 /* App Wrapper Layout */
@@ -88,8 +84,7 @@ body {
   padding: 2.5rem;
   height: 100vh;
   overflow-y: auto;
-  background: radial-gradient(circle at top right, rgba(99, 102, 241, 0.05) 0%, transparent 40%),
-              radial-gradient(circle at bottom left, rgba(236, 72, 153, 0.03) 0%, transparent 35%);
+  background: #080808;
 }
 
 /* Glassmorphism Card Style */
@@ -111,7 +106,7 @@ body {
 
 /* Elegant Text Styling */
 .gradient-text {
-  background: var(--gradient-primary);
+  background: var(--gradient-text);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   font-weight: 800;
@@ -152,8 +147,8 @@ body {
 .form-select:focus,
 .form-textarea:focus {
   background: rgba(255, 255, 255, 0.06);
-  border-color: var(--accent-purple);
-  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.15);
+  border-color: var(--accent-orange);
+  box-shadow: 0 0 0 3px rgba(255, 136, 0, 0.15);
 }
 
 /* Drag & Drop File Upload */
@@ -174,11 +169,10 @@ body {
 
 .dropzone.active,
 .dropzone:hover {
-  border-color: var(--accent-purple);
-  background: rgba(139, 92, 246, 0.03);
+  border-color: var(--accent-orange);
+  background: rgba(255, 136, 0, 0.03);
 }
 
-/* Buttons */
 .btn {
   background: var(--gradient-primary);
   border: none;
@@ -187,21 +181,20 @@ body {
   cursor: pointer;
   font-family: var(--font-sans);
   font-size: 1rem;
-  font-weight: 600;
+  font-weight: 700;
   padding: 0.8rem 1.8rem;
   transition: var(--transition-smooth);
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
-  box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
+  box-shadow: 0 4px 15px rgba(255, 136, 0, 0.3);
 }
 
 .btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(139, 92, 246, 0.5);
-  opacity: 0.95;
+  box-shadow: 0 6px 20px rgba(255, 136, 0, 0.5);
+  opacity: 0.92;
 }
 
 .btn:active {
