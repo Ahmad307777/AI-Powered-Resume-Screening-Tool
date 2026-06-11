@@ -8,7 +8,7 @@ import {
 } from 'lucide-react';
 import CVEnhancer from './CVEnhancer';
 import { useNavigate } from 'react-router-dom';
-import { T, Logo } from '../theme';
+import { T, Logo } from '../theme.jsx';
 
 /* ═══════════════════════════════════════════════════════
    KEYFRAMES injected once

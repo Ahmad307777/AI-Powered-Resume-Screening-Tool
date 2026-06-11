@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { API_BASE_URL } from '../config';
 import { Sliders, Search, Eye, FileDown, X, AlertCircle, Loader2, FileText } from 'lucide-react';
-import { T } from '../theme';
+import { T } from '../theme.jsx';
 
 export default function RecruiterPanel({ activeConfig, onConfigChange }) {
   const [position, setPosition]                 = useState('');

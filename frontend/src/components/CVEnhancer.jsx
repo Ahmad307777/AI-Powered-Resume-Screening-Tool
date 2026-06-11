@@ -2,7 +2,7 @@ import { useState } from 'react';
 import axios from 'axios';
 import { API_BASE_URL } from '../config';
 import { Sparkles, Loader2, AlertTriangle, CheckCircle2, XCircle, ChevronDown, ChevronUp, Wand2 } from 'lucide-react';
-import { T } from '../theme';
+import { T } from '../theme.jsx';
 
 export default function CVEnhancer({ file, activeConfig }) {
   const [loading, setLoading]           = useState(false);

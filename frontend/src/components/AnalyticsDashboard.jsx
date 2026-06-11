@@ -3,7 +3,7 @@ import axios from 'axios';
 import { API_BASE_URL } from '../config';
 import { BarChart, Bar, LineChart, Line, PieChart, Pie, Cell, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from 'recharts';
 import { Users, Layout, Award, MapPin, Loader2, AlertCircle } from 'lucide-react';
-import { T } from '../theme';
+import { T } from '../theme.jsx';
 
 const COLORS = [T.orange, T.orangeL, '#facc15', '#fb923c', '#fde68a', '#fed7aa', '#fef3c7'];
 

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { BarChart3, Users, Award, Clock, ArrowLeft } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { T, Logo } from '../theme';
+import { T, Logo } from '../theme.jsx';
 
 export default function Sidebar({ activeTab, setActiveTab, activeConfig }) {
   const navigate = useNavigate();
