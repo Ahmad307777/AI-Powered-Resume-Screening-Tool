@@ -6,7 +6,7 @@ import {
   XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, Legend
 } from 'recharts';
 import { Users, Layers, Award, MapPin, Loader2, AlertCircle, RefreshCw, TrendingUp, CheckCircle, XCircle } from 'lucide-react';
-import { T } from '../theme.jsx';
+import { useTheme } from '../theme.jsx';
 
 /* ── Animations ─────────────────────────────────────── */
 const ANIM = `
@@ -22,6 +22,7 @@ const ANIM = `
 
 /* ── Animated counter ────────────────────────────────── */
 function Counter({ end, suffix = '', prefix = '', duration = 1400 }) {
+  const { T } = useTheme();
   const [val, setVal] = useState(0);
   const [started, setStarted] = useState(false);
   const ref = useRef(null);
@@ -52,13 +53,15 @@ function Counter({ end, suffix = '', prefix = '', duration = 1400 }) {
 
 /* ── Skeleton loader ─────────────────────────────────── */
 function Skeleton({ h = '280px', radius = '16px' }) {
+  const { mode } = useTheme();
   return (
-    <div style={{ height: h, borderRadius: radius, background: 'linear-gradient(90deg,#111 25%,#1a1a1a 50%,#111 75%)', backgroundSize: '400px 100%', animation: 'shimmer 1.4s linear infinite' }} />
+    <div style={{ height: h, borderRadius: radius, background: mode === 'dark' ? 'linear-gradient(90deg,#111 25%,#1a1a1a 50%,#111 75%)' : 'linear-gradient(90deg,#e8e5e0 25%,#f0ede8 50%,#e8e5e0 75%)', backgroundSize: '400px 100%', animation: 'shimmer 1.4s linear infinite' }} />
   );
 }
 
 /* ── Custom tooltip ──────────────────────────────────── */
 function Tip({ active, payload, label }) {
+  const { T } = useTheme();
   if (!active || !payload?.length) return null;
   return (
     <div style={{ background: '#0e0e0e', border: `1px solid ${T.lineO}`, borderRadius: '10px', padding: '10px 14px', boxShadow: '0 12px 32px rgba(0,0,0,.7)', minWidth: '120px' }}>
@@ -74,6 +77,7 @@ function Tip({ active, payload, label }) {
 
 /* ── KPI Card ────────────────────────────────────────── */
 function KPICard({ icon: Icon, label, value, suffix, prefix, color, bg, delay = '0s', trend }) {
+  const { T } = useTheme();
   return (
     <div style={{ background: T.bgCard, border: `1px solid ${color}22`, borderRadius: '18px', padding: '1.4rem 1.5rem', display: 'flex', flexDirection: 'column', gap: '.75rem', animation: `fadeUp .5s ease ${delay} both`, position: 'relative', overflow: 'hidden', transition: 'border-color .3s', cursor: 'default' }}
       onMouseEnter={e => e.currentTarget.style.borderColor = `${color}55`}
@@ -103,6 +107,7 @@ function KPICard({ icon: Icon, label, value, suffix, prefix, color, bg, delay = 
 
 /* ── Chart Card ─────────────────────────────────────── */
 function ChartCard({ title, subtitle, children, delay = '0s', action }) {
+  const { T } = useTheme();
   return (
     <div style={{ background: T.bgCard, border: `1px solid ${T.line}`, borderRadius: '20px', padding: '1.5rem', display: 'flex', flexDirection: 'column', gap: '1rem', animation: `fadeUp .5s ease ${delay} both`, transition: 'border-color .25s' }}
       onMouseEnter={e => e.currentTarget.style.borderColor = T.lineO}
@@ -124,6 +129,7 @@ function ChartCard({ title, subtitle, children, delay = '0s', action }) {
 
 /* ── Selected / Rejected mini bar ────────────────────── */
 function SelectionBar({ selected, total }) {
+  const { T } = useTheme();
   const pct = total > 0 ? Math.round((selected / total) * 100) : 0;
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '.5rem' }}>
@@ -152,6 +158,7 @@ export default function AnalyticsDashboard() {
   const [data, setData]    = useState(null);
   const [loading, setLoad] = useState(true);
   const [error, setError]  = useState('');
+  const { T } = useTheme();
 
   useEffect(() => { fetchAnalytics(); }, []);
 

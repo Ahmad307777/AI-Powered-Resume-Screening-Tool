@@ -2,13 +2,15 @@ import { useState } from 'react';
 import axios from 'axios';
 import { API_BASE_URL } from '../config';
 import { Sparkles, Loader2, AlertTriangle, CheckCircle2, XCircle, ChevronDown, ChevronUp, Wand2 } from 'lucide-react';
-import { T } from '../theme.jsx';
+import { useTheme } from '../theme.jsx';
 
 export default function CVEnhancer({ file, activeConfig }) {
   const [loading, setLoading]           = useState(false);
   const [result, setResult]             = useState(null);
   const [error, setError]               = useState('');
   const [expandedFault, setExpandedFault] = useState(null);
+  const { T } = useTheme();
+  const S = makeS(T);
 
   const handleEnhance = async () => {
     if (!file) return;
@@ -145,10 +147,10 @@ export default function CVEnhancer({ file, activeConfig }) {
   );
 }
 
-const S = {
+const makeS = (T) => ({
   wrapper: { marginTop: '2rem', background: 'rgba(255,136,0,.03)', border: `1px solid ${T.lineO}`, borderRadius: '18px', padding: '1.5rem' },
   header:  { display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '.75rem', marginBottom: '.5rem' },
   enhBtn:  { display: 'flex', alignItems: 'center', gap: '.5rem', padding: '.6rem 1.4rem', borderRadius: '10px', border: 'none', background: T.btnGrad, color: T.white, fontWeight: 700, fontSize: '.875rem', boxShadow: '0 0 18px rgba(255,136,0,.28)', transition: 'opacity .2s', fontFamily: "'Outfit',sans-serif", letterSpacing: '.2px' },
   cols:    { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' },
   panel:   { background: T.bgCard2, border: `1px solid ${T.line}`, borderRadius: '12px', padding: '1rem' },
-};
+});
