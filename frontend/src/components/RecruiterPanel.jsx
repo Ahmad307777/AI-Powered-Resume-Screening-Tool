@@ -6,7 +6,7 @@ import {
   Loader2, FileText, CheckCircle, XCircle, Sparkles,
   User, Mail, Phone, MapPin, Link, RefreshCw, Filter
 } from 'lucide-react';
-import { T } from '../theme.jsx';
+import { useTheme } from '../theme.jsx';
 
 /* ── Animations ─────────────────────────────────────── */
 const ANIM = `
@@ -21,11 +21,13 @@ const ANIM = `
 
 /* ── Skeleton ────────────────────────────────────────── */
 function Skel({ h = '40px', radius = '8px', w = '100%' }) {
-  return <div style={{ height: h, width: w, borderRadius: radius, background: 'linear-gradient(90deg,#111 25%,#181818 50%,#111 75%)', backgroundSize: '400px 100%', animation: 'shimmer 1.4s linear infinite' }} />;
+  const { mode } = useTheme();
+  return <div style={{ height: h, width: w, borderRadius: radius, background: mode === 'dark' ? 'linear-gradient(90deg,#111 25%,#181818 50%,#111 75%)' : 'linear-gradient(90deg,#e8e5e0 25%,#f0ede8 50%,#e8e5e0 75%)', backgroundSize: '400px 100%', animation: 'shimmer 1.4s linear infinite' }} />;
 }
 
 /* ── Score ring (small) ──────────────────────────────── */
 function MiniRing({ value, size = 46 }) {
+  const { T } = useTheme();
   const r = 16, circ = 2 * Math.PI * r;
   const pct = Math.min(parseFloat(value) || 0, 100);
   const col = pct >= 70 ? T.green : pct >= 45 ? T.amber : T.red;
@@ -46,6 +48,7 @@ function MiniRing({ value, size = 46 }) {
 
 /* ── Status badge ────────────────────────────────────── */
 function StatusBadge({ s, small }) {
+  const { T } = useTheme();
   const ok = s === 'Selected';
   return (
     <span style={{ display: 'inline-flex', alignItems: 'center', gap: '.28rem', padding: small ? '.18rem .55rem' : '.28rem .7rem', borderRadius: '999px', border: `1px solid ${ok ? 'rgba(34,197,94,.3)' : 'rgba(239,68,68,.3)'}`, background: ok ? 'rgba(34,197,94,.08)' : 'rgba(239,68,68,.08)', color: ok ? T.green : T.red, fontSize: small ? '.65rem' : '.72rem', fontWeight: 700 }}>
@@ -57,11 +60,12 @@ function StatusBadge({ s, small }) {
 /* ── Modal: Candidate Report ─────────────────────────── */
 function CandidateModal({ cand, activeConfig, onClose }) {
   const [viewMode, setView] = useState('document');
+  const { T } = useTheme();
 
   return (
     <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,.88)', backdropFilter: 'blur(12px)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 9999, padding: '1.5rem' }}
       onClick={e => { if (e.target === e.currentTarget) onClose(); }}>
-      <div style={{ width: '1140px', maxWidth: '100%', maxHeight: '92vh', background: '#0a0a0a', border: `1px solid ${T.line}`, borderRadius: '24px', display: 'flex', flexDirection: 'column', overflow: 'hidden', boxShadow: '0 32px 100px rgba(0,0,0,.95)', animation: 'scaleIn .3s ease both' }}>
+      <div style={{ width: '1140px', maxWidth: '100%', maxHeight: '92vh', background: T.bgCard, border: `1px solid ${T.line}`, borderRadius: '24px', display: 'flex', flexDirection: 'column', overflow: 'hidden', boxShadow: T.shadow, animation: 'scaleIn .3s ease both' }}>
 
         {/* Modal header */}
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '1.4rem 1.75rem', borderBottom: `1px solid ${T.line}`, gap: '1rem', background: 'linear-gradient(135deg,rgba(255,136,0,.04),transparent)' }}>
@@ -205,6 +209,7 @@ export default function RecruiterPanel({ activeConfig, onConfigChange }) {
   const [submitting, setSubmitting]     = useState(false);
   const [loadingCands, setLoadingCands] = useState(false);
   const [message, setMessage]           = useState({ type: '', text: '' });
+  const { T } = useTheme();
 
   useEffect(() => {
     if (activeConfig) { setPosition(activeConfig.position || ''); setExperience(String(activeConfig.experience || 0)); }
