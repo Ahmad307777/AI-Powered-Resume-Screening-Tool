@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import { BarChart3, Users, Award, Clock, ArrowLeft, TrendingUp, Zap } from 'lucide-react';
+import { BarChart3, Users, Award, Clock, ArrowLeft, TrendingUp, Zap, Sun, Moon } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { T, Logo } from '../theme.jsx';
+import { useTheme, Logo } from '../theme.jsx';
 
 const ANIM = `
 @keyframes sidebarFadeIn { from{opacity:0;transform:translateX(-16px)} to{opacity:1;transform:none} }
@@ -12,19 +12,21 @@ const ANIM = `
 export default function Sidebar({ activeTab, setActiveTab, activeConfig }) {
   const navigate = useNavigate();
   const [hov, setHov] = useState(null);
+  const { mode, toggle, T } = useTheme();
 
   const menuItems = [
     { id: 'analytics', label: 'Analytics',      icon: BarChart3, desc: 'Charts & metrics'   },
     { id: 'recruiter', label: 'Recruiter Panel', icon: Users,     desc: 'Candidates & config' },
   ];
 
+  const st = S(T);
   return (
-    <aside style={S.sidebar}>
+    <aside style={st.sidebar}>
       <style>{ANIM}</style>
 
       {/* Brand */}
-      <div style={{ ...S.brand, animation: 'sidebarFadeIn .5s ease both' }}>
-        <div style={S.logoWrap}>
+      <div style={{ ...st.brand, animation: 'sidebarFadeIn .5s ease both' }}>
+        <div style={st.logoWrap}>
           <Logo size={30} />
         </div>
         <div style={{ fontFamily: "'Outfit',sans-serif", lineHeight: 1 }}>
@@ -35,7 +37,7 @@ export default function Sidebar({ activeTab, setActiveTab, activeConfig }) {
         </div>
       </div>
 
-      <div style={S.divider} />
+      <div style={st.divider} />
 
       {/* Live indicator */}
       <div style={{ display: 'flex', alignItems: 'center', gap: '.45rem', padding: '.5rem .75rem', marginBottom: '.75rem', animation: 'sidebarFadeIn .5s ease .1s both' }}>
@@ -79,6 +81,16 @@ export default function Sidebar({ activeTab, setActiveTab, activeConfig }) {
 
       <div style={{ flexGrow: 1 }} />
 
+      {/* ── Theme toggle ── */}
+      <button onClick={toggle}
+        onMouseEnter={e => { e.currentTarget.style.background = mode === 'dark' ? 'rgba(255,255,255,.06)' : 'rgba(0,0,0,.06)'; e.currentTarget.style.borderColor = T.lineO; }}
+        onMouseLeave={e => { e.currentTarget.style.background = mode === 'dark' ? 'rgba(255,255,255,.03)' : 'rgba(0,0,0,.03)'; e.currentTarget.style.borderColor = T.line; }}
+        style={{ display: 'flex', alignItems: 'center', gap: '.5rem', padding: '.6rem .9rem', background: mode === 'dark' ? 'rgba(255,255,255,.03)' : 'rgba(0,0,0,.03)', border: `1px solid ${T.line}`, borderRadius: '10px', cursor: 'pointer', fontFamily: "'Outfit',sans-serif", fontSize: '.82rem', fontWeight: 600, color: T.grey, transition: 'all .2s', width: '100%', marginBottom: '.5rem', justifyContent: 'center', animation: 'sidebarFadeIn .5s ease .3s both' }}>
+        {mode === 'dark'
+          ? <><Sun size={14} color={T.orange} /> Light Mode</>
+          : <><Moon size={14} color={T.orange} /> Dark Mode</>}
+      </button>
+
       {/* Quick stats */}
       {activeConfig && (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '.5rem', marginBottom: '.75rem', animation: 'sidebarFadeIn .5s ease .35s both' }}>
@@ -114,7 +126,7 @@ export default function Sidebar({ activeTab, setActiveTab, activeConfig }) {
         </div>
       )}
 
-      <div style={S.divider} />
+      <div style={st.divider} />
 
       {/* Back */}
       <button onClick={() => navigate('/')}
@@ -127,7 +139,7 @@ export default function Sidebar({ activeTab, setActiveTab, activeConfig }) {
   );
 }
 
-const S = {
+const S = (T) => ({
   sidebar: {
     width: '240px', flexShrink: 0,
     background: T.bgCard,
@@ -139,4 +151,4 @@ const S = {
   logoWrap: { width: '38px', height: '38px', borderRadius: '10px', background: 'rgba(255,136,0,.08)', border: `1px solid rgba(255,136,0,.15)`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 },
   brand:   { display: 'flex', alignItems: 'center', gap: '.65rem', marginBottom: '1.25rem' },
   divider: { height: '1px', background: T.line, margin: '.6rem 0' },
-};
+});

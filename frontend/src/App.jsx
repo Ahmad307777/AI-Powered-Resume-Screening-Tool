@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import axios from 'axios';
 import { API_BASE_URL } from './config';
+import { ThemeProvider } from './theme.jsx';
 import Sidebar from './components/Sidebar';
 import AnalyticsDashboard from './components/AnalyticsDashboard';
 import RecruiterPanel from './components/RecruiterPanel';
@@ -47,23 +48,24 @@ export default function App() {
   };
 
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<PortalSelect />} />
-        
-        <Route path="/candidate" element={
-          <div className="app-container">
-             {/* No sidebar for candidate portal, take full width */}
-             <main className="main-content" style={{ width: '100%', maxWidth: '100%', margin: '0 auto', display: 'flex', justifyContent: 'center' }}>
-                <CandidatePortal activeConfig={activeConfig} onApplicationSuccess={handleConfigChange} />
-             </main>
-          </div>
-        } />
-        
-        <Route path="/hr" element={
-          <HRPortal activeConfig={activeConfig} handleConfigChange={handleConfigChange} />
-        } />
-      </Routes>
-    </Router>
+    <ThemeProvider>
+      <Router>
+        <Routes>
+          <Route path="/" element={<PortalSelect />} />
+          
+          <Route path="/candidate" element={
+            <div className="app-container">
+               <main className="main-content" style={{ width: '100%', maxWidth: '100%', margin: '0 auto', display: 'flex', justifyContent: 'center' }}>
+                  <CandidatePortal activeConfig={activeConfig} onApplicationSuccess={handleConfigChange} />
+               </main>
+            </div>
+          } />
+          
+          <Route path="/hr" element={
+            <HRPortal activeConfig={activeConfig} handleConfigChange={handleConfigChange} />
+          } />
+        </Routes>
+      </Router>
+    </ThemeProvider>
   );
 }
