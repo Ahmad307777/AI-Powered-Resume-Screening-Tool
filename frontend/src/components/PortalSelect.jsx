@@ -5,40 +5,34 @@ import {
   FileText, Brain, Sparkles, Menu, X, ChevronRight,
   Upload, CheckCircle, Zap, TrendingUp, Star
 } from 'lucide-react';
+import { useTheme, Logo as SharedLogo } from '../theme.jsx';
 
 /* ═══════════════════════════════════════════════════════
-   THEME  —  pure black · white · orange
+   THEME  —  built from ThemeContext at runtime
    ═══════════════════════════════════════════════════════ */
-const C = {
-  black:   '#000000',
-  white:   '#ffffff',
-  offW:    '#f5f5f5',
-  grey:    '#999999',
-  greyD:   '#444444',
-  orange:  '#ff8800',
-  orangeL: '#ffaa33',
-  card:    '#0e0e0e',
-  card2:   '#141414',
-  line:    'rgba(255,255,255,0.09)',
-  lineO:   'rgba(255,136,0,0.35)',
-  btnGrad: 'linear-gradient(135deg,#ff8800,#ffaa33)',
-  txtGrad: 'linear-gradient(90deg,#ff8800 0%,#ffcc55 100%)',
-};
+function useC() {
+  const { T, mode } = useTheme();
+  return {
+    black:   T.bg,
+    white:   T.white,
+    offW:    T.offW,
+    grey:    T.grey,
+    greyD:   T.greyD,
+    orange:  T.orange,
+    orangeL: T.orangeL,
+    card:    T.bgCard,
+    card2:   T.bgCard2,
+    line:    T.line,
+    lineO:   T.lineO,
+    btnGrad: T.btnGrad,
+    txtGrad: T.txtGrad,
+    mode,
+  };
+}
 
 /* ─── SVG Logo ──────────────────────────────────────── */
 function Logo({ size = 34 }) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 48 48" fill="none">
-      <rect width="48" height="48" rx="12" fill={C.orange}/>
-      <rect x="12" y="9" width="18" height="24" rx="2.5" stroke="white" strokeWidth="2"/>
-      <line x1="16" y1="16" x2="26" y2="16" stroke="white" strokeWidth="1.8" strokeLinecap="round"/>
-      <line x1="16" y1="21" x2="26" y2="21" stroke="white" strokeWidth="1.8" strokeLinecap="round"/>
-      <line x1="16" y1="26" x2="22" y2="26" stroke="white" strokeWidth="1.8" strokeLinecap="round"/>
-      <circle cx="34" cy="34" r="9" fill={C.black}/>
-      <circle cx="34" cy="34" r="9" fill={C.orange}/>
-      <path d="M34 29v10M29 34h10" stroke="white" strokeWidth="2.2" strokeLinecap="round"/>
-    </svg>
-  );
+  return <SharedLogo size={size} />;
 }
 
 /* ─── Scroll-fade hook ──────────────────────────────── */
@@ -65,6 +59,7 @@ const fade = (v, delay = '0s') => ({
 function Navbar() {
   const [mob, setMob] = useState(false);
   const [up, setUp]   = useState(false);
+  const C = useC();
 
   useEffect(() => {
     const fn = () => setUp(window.scrollY > 30);
@@ -122,7 +117,7 @@ function Navbar() {
       </button>
 
       {mob && (
-        <div style={{ position: 'absolute', top: '64px', left: 0, right: 0, background: '#000', borderBottom: `1px solid ${C.line}`, display: 'flex', flexDirection: 'column', padding: '1rem 6vw' }}>
+        <div style={{ position: 'absolute', top: '64px', left: 0, right: 0, background: C.black, borderBottom: `1px solid ${C.line}`, display: 'flex', flexDirection: 'column', padding: '1rem 6vw' }}>
           {[['features','Features'],['how-it-works','How It Works'],['get-started','Portals']].map(([id, lbl]) => (
             <button key={id} onClick={() => go(id)}
               style={{ background: 'none', border: 'none', borderBottom: `1px solid ${C.line}`, color: C.offW, fontSize: '1rem', fontWeight: 500, padding: '.85rem 0', cursor: 'pointer', textAlign: 'left', fontFamily: "'Outfit',sans-serif" }}>
@@ -139,6 +134,7 @@ function Navbar() {
    HERO
    ═══════════════════════════════════════════════════════ */
 function HeroMockCard() {
+  const C = useC();
   return (
     <div style={{ position: 'relative', width: '360px', flexShrink: 0 }}>
       {/* orange glow */}
@@ -176,7 +172,7 @@ function HeroMockCard() {
       </div>
 
       {/* floating tag */}
-      <div style={{ position: 'absolute', top: '-18px', right: '-14px', display: 'flex', alignItems: 'center', gap: '.35rem', background: '#0e0e0e', border: `1px solid rgba(255,136,0,.35)`, borderRadius: '999px', padding: '.42rem .95rem', boxShadow: '0 6px 20px rgba(0,0,0,.6)' }}>
+      <div style={{ position: 'absolute', top: '-18px', right: '-14px', display: 'flex', alignItems: 'center', gap: '.35rem', background: C.card, border: `1px solid rgba(255,136,0,.35)`, borderRadius: '999px', padding: '.42rem .95rem', boxShadow: '0 6px 20px rgba(0,0,0,.6)' }}>
         <TrendingUp size={14} color={C.orange}/>
         <span style={{ color: C.orangeL, fontSize: '.76rem', fontWeight: 700 }}>500+ screened</span>
       </div>
@@ -186,6 +182,7 @@ function HeroMockCard() {
 
 function Hero({ onApply, onHR }) {
   const [r, v] = useFade(.04);
+  const C = useC();
   return (
     <section ref={r} style={{
       width: '100%', minHeight: '100vh',
@@ -258,8 +255,9 @@ const STATS = [
 
 function StatsBar() {
   const [r, v] = useFade();
+  const C = useC();
   return (
-    <div ref={r} style={{ width: '100%', background: '#0a0a0a', borderTop: `1px solid ${C.line}`, borderBottom: `1px solid ${C.line}`, padding: '2.8rem 6vw', ...fade(v) }}>
+    <div ref={r} style={{ width: '100%', background: C.card, borderTop: `1px solid ${C.line}`, borderBottom: `1px solid ${C.line}`, padding: '2.8rem 6vw', ...fade(v) }}>
       <div style={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center', flexWrap: 'wrap', gap: '2rem' }}>
         {STATS.map((s, i) => (
           <div key={s.label} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '.3rem', flex: '1 1 120px', position: 'relative' }}>
@@ -279,6 +277,7 @@ function StatsBar() {
    SECTION HELPERS
    ═══════════════════════════════════════════════════════ */
 function Tag({ text }) {
+  const C = useC();
   return (
     <span style={{ display: 'inline-flex', alignItems: 'center', gap: '.35rem', background: 'rgba(255,136,0,.1)', border: `1px solid rgba(255,136,0,.25)`, borderRadius: '999px', padding: '.3rem .9rem', color: C.orangeL, fontSize: '.75rem', fontWeight: 700, letterSpacing: '.5px', textTransform: 'uppercase', marginBottom: '1.1rem' }}>
       {text}
@@ -287,6 +286,7 @@ function Tag({ text }) {
 }
 
 function SecHead({ tag, title, sub }) {
+  const C = useC();
   return (
     <div style={{ textAlign: 'center', marginBottom: '3.5rem' }}>
       <Tag text={tag}/>
@@ -308,6 +308,7 @@ const FEATURES = [
 
 function FeatureCard({ f }) {
   const [hov, set] = useState(false);
+  const C = useC();
   const Icon = f.icon;
   return (
     <div onMouseEnter={() => set(true)} onMouseLeave={() => set(false)}
@@ -323,6 +324,7 @@ function FeatureCard({ f }) {
 
 function FeaturesSection() {
   const [r, v] = useFade();
+  const C = useC();
   return (
     <section id="features" ref={r} style={{ width: '100%', background: C.black, padding: '7rem 6vw', ...fade(v) }}>
       <SecHead
@@ -348,8 +350,9 @@ const STEPS = [
 
 function HowItWorks() {
   const [r, v] = useFade();
+  const C = useC();
   return (
-    <section id="how-it-works" ref={r} style={{ width: '100%', background: '#050505', padding: '7rem 6vw', borderTop: `1px solid ${C.line}`, borderBottom: `1px solid ${C.line}`, ...fade(v, '.1s') }}>
+    <section id="how-it-works" ref={r} style={{ width: '100%', background: C.card, padding: '7rem 6vw', borderTop: `1px solid ${C.line}`, borderBottom: `1px solid ${C.line}`, ...fade(v, '.1s') }}>
       <SecHead
         tag="How It Works"
         title={`From upload to result<br/><span style="background:${C.txtGrad};-webkit-background-clip:text;-webkit-text-fill-color:transparent">in three simple steps</span>`}
@@ -386,6 +389,7 @@ function HowItWorks() {
 function PortalSection({ onCandidate, onHR }) {
   const [hov, set] = useState(null);
   const [r, v] = useFade();
+  const C = useC();
 
   const portals = [
     { id: 'candidate', icon: Users,            action: onCandidate, title: 'Candidate Portal', desc: 'Upload your resume, check alignment with the active job role, and get AI-powered CV improvement feedback.', pills: ['Resume Upload','AI Screening','CV Enhancer'] },
@@ -429,8 +433,9 @@ function PortalSection({ onCandidate, onHR }) {
    FOOTER
    ═══════════════════════════════════════════════════════ */
 function Footer() {
+  const C = useC();
   return (
-    <footer style={{ width: '100%', background: '#050505', borderTop: `1px solid ${C.line}`, padding: '2rem 6vw' }}>
+    <footer style={{ width: '100%', background: C.card, borderTop: `1px solid ${C.line}`, padding: '2rem 6vw' }}>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1rem' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '.6rem' }}>
           <Logo size={28}/>
@@ -452,6 +457,7 @@ function Footer() {
    ═══════════════════════════════════════════════════════ */
 export default function PortalSelect() {
   const nav = useNavigate();
+  const C = useC();
   return (
     <div style={{ background: C.black, minHeight: '100vh', width: '100%', overflowX: 'hidden' }}>
       <Navbar/>
