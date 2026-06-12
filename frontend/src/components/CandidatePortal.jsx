@@ -8,7 +8,7 @@ import {
 } from 'lucide-react';
 import CVEnhancer from './CVEnhancer';
 import { useNavigate } from 'react-router-dom';
-import { T, Logo } from '../theme.jsx';
+import { useTheme, Logo } from '../theme.jsx';
 
 /* ═══════════════════════════════════════════════════════
    KEYFRAMES injected once
@@ -126,12 +126,14 @@ function Particles() {
 }
 
 /* ─── Progress bar ────────────────────────────────────── */
-function ProgressBar({ value, color = T.orange, delay = '0s' }) {
+function ProgressBar({ value, color, delay = '0s' }) {
+  const { T } = useTheme();
+  const c = color || T.orange;
   return (
     <div style={{ height: '4px', background: 'rgba(255,255,255,.06)', borderRadius: '99px', overflow: 'hidden' }}>
       <div style={{
         height: '100%', borderRadius: '99px',
-        background: `linear-gradient(90deg, ${color}, ${T.orangeL})`,
+        background: `linear-gradient(90deg, ${c}, ${T.orangeL})`,
         '--target-width': `${value}%`,
         animation: `progressFill .9s ease ${delay} both`,
         width: `${value}%`,
@@ -142,6 +144,7 @@ function ProgressBar({ value, color = T.orange, delay = '0s' }) {
 
 /* ─── Step indicator ─────────────────────────────────── */
 function StepDots({ step }) {
+  const { T } = useTheme();
   const steps = ['Details', 'Upload', 'Result'];
   return (
     <div style={{ display: 'flex', alignItems: 'center', gap: '.5rem', justifyContent: 'center', marginBottom: '2rem' }}>
@@ -171,6 +174,7 @@ function StepDots({ step }) {
    HERO HEADER (shown before result)
    ═══════════════════════════════════════════════════════ */
 function HeroHeader({ activeConfig }) {
+  const { T } = useTheme();
   const typed = useTypewriter([
     'Upload Your Resume',
     'Get AI Feedback',
@@ -179,7 +183,7 @@ function HeroHeader({ activeConfig }) {
   ]);
 
   return (
-    <div style={{ position: 'relative', width: '100%', overflow: 'hidden', borderRadius: '24px', marginBottom: '2rem', background: 'linear-gradient(135deg,#0f0f0f 0%,#141414 100%)', border: `1px solid ${T.line}`, padding: '3rem 2.5rem' }}>
+    <div style={{ position: 'relative', width: '100%', overflow: 'hidden', borderRadius: '24px', marginBottom: '2rem', background: `linear-gradient(135deg,${T.bgCard} 0%,${T.bgCard2} 100%)`, border: `1px solid ${T.line}`, padding: '3rem 2.5rem' }}>
       <Particles />
 
       {/* Glow orbs */}
@@ -233,6 +237,7 @@ function HeroHeader({ activeConfig }) {
    ANIMATED FORM FIELD
    ═══════════════════════════════════════════════════════ */
 function Field({ icon: Icon, label, delay = '0s', children }) {
+  const { T } = useTheme();
   const [focus, setFocus] = useState(false);
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '.4rem', animation: `fadeUp .5s ease ${delay} both` }}>
@@ -252,6 +257,7 @@ function Field({ icon: Icon, label, delay = '0s', children }) {
    SCORE RING
    ═══════════════════════════════════════════════════════ */
 function ScoreRing({ value, label, color, delay = '0s', size = 100 }) {
+  const { T } = useTheme();
   const r = 38;
   const circ = 2 * Math.PI * r;
   const pct = Math.min(parseFloat(value) || 0, 100);
@@ -282,6 +288,7 @@ function ScoreRing({ value, label, color, delay = '0s', size = 100 }) {
    RESULT VIEW
    ═══════════════════════════════════════════════════════ */
 function ResultView({ result, activeConfig, onReset }) {
+  const { T } = useTheme();
   const selected = result.success && result.data?.status === 'Selected';
   const failed   = !result.success;
 
@@ -421,6 +428,7 @@ function ResultView({ result, activeConfig, onReset }) {
    ═══════════════════════════════════════════════════════ */
 export default function CandidatePortal({ activeConfig, onApplicationSuccess }) {
   const navigate = useNavigate();
+  const { T } = useTheme();
   const [email, setEmail]                   = useState('');
   const [fullName, setFullName]             = useState('');
   const [mobile, setMobile]                 = useState('');
