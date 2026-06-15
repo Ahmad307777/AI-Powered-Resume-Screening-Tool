@@ -199,7 +199,7 @@ function CandidateModal({ cand, activeConfig, onClose }) {
 /* ══════════════════════════════════════════════════════
    MAIN EXPORT
    ══════════════════════════════════════════════════════ */
-export default function RecruiterPanel({ activeConfig, onConfigChange }) {
+export default function RecruiterPanel({ activeConfig, onConfigChange, hrId = '' }) {
   const [position, setPosition]         = useState('');
   const [experience, setExperience]     = useState('0');
   const [candidates, setCandidates]     = useState([]);
@@ -217,7 +217,7 @@ export default function RecruiterPanel({ activeConfig, onConfigChange }) {
   }, [activeConfig]);
 
   const fetchCandidates = async () => {
-    try { setLoadingCands(true); const res = await axios.get(`${API_BASE_URL}/api/candidates?t=${Date.now()}`); setCandidates(res.data); }
+    try { setLoadingCands(true); const res = await axios.get(`${API_BASE_URL}/api/candidates?hr_id=${hrId}&t=${Date.now()}`); setCandidates(res.data); }
     catch {} finally { setLoadingCands(false); }
   };
 
@@ -226,7 +226,7 @@ export default function RecruiterPanel({ activeConfig, onConfigChange }) {
     if (!position) { setMessage({ type: 'error', text: 'Please select a position.' }); return; }
     try {
       setSubmitting(true);
-      const res = await axios.post(`${API_BASE_URL}/api/config`, { position, experience: parseInt(experience)||0 });
+      const res = await axios.post(`${API_BASE_URL}/api/config`, { position, experience: parseInt(experience)||0, hr_id: hrId });
       setMessage({ type: 'success', text: res.data.message });
       onConfigChange(); fetchCandidates();
     } catch (err) { setMessage({ type: 'error', text: err.response?.data?.detail || 'Failed to update.' }); }

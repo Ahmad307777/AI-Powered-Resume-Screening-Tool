@@ -154,18 +154,18 @@ function SelectionBar({ selected, total }) {
 /* ══════════════════════════════════════════════════════
    MAIN EXPORT
    ══════════════════════════════════════════════════════ */
-export default function AnalyticsDashboard() {
+export default function AnalyticsDashboard({ hrId = '' }) {
   const [data, setData]    = useState(null);
   const [loading, setLoad] = useState(true);
   const [error, setError]  = useState('');
   const { T } = useTheme();
 
-  useEffect(() => { fetchAnalytics(); }, []);
+  useEffect(() => { fetchAnalytics(); }, [hrId]);
 
   const fetchAnalytics = async () => {
     try {
       setLoad(true);
-      const res = await axios.get(`${API_BASE_URL}/api/analytics?t=${Date.now()}`);
+      const res = await axios.get(`${API_BASE_URL}/api/analytics?hr_id=${hrId}&t=${Date.now()}`);
       setData(res.data); setError('');
     } catch { setError('Could not retrieve analytics. Is the backend running?'); }
     finally { setLoad(false); }

@@ -1,7 +1,8 @@
 import { useState } from 'react';
-import { BarChart3, Users, Award, Clock, ArrowLeft, TrendingUp, Zap, Sun, Moon } from 'lucide-react';
+import { BarChart3, Users, Award, Clock, ArrowLeft, TrendingUp, Zap, Sun, Moon, LogOut } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useTheme, Logo } from '../theme.jsx';
+import { logoutHR } from './HRLogin';
 
 const ANIM = `
 @keyframes sidebarFadeIn { from{opacity:0;transform:translateX(-16px)} to{opacity:1;transform:none} }
@@ -9,7 +10,7 @@ const ANIM = `
 @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.5} }
 `;
 
-export default function Sidebar({ activeTab, setActiveTab, activeConfig }) {
+export default function Sidebar({ activeTab, setActiveTab, activeConfig, hrUser = {} }) {
   const navigate = useNavigate();
   const [hov, setHov] = useState(null);
   const { mode, toggle, T } = useTheme();
@@ -38,6 +39,21 @@ export default function Sidebar({ activeTab, setActiveTab, activeConfig }) {
       </div>
 
       <div style={st.divider} />
+
+      {/* HR User profile card */}
+      {hrUser?.full_name && (
+        <div style={{ background:'rgba(255,136,0,.05)', border:`1px solid rgba(255,136,0,.15)`, borderRadius:'12px', padding:'.75rem .9rem', marginBottom:'.6rem', animation:'sidebarFadeIn .5s ease .12s both' }}>
+          <div style={{ display:'flex', alignItems:'center', gap:'.6rem' }}>
+            <div style={{ width:'34px', height:'34px', borderRadius:'50%', background:'linear-gradient(135deg,#ff8800,#ffcc55)', display:'flex', alignItems:'center', justifyContent:'center', fontWeight:900, fontSize:'.9rem', color:'#fff', flexShrink:0 }}>
+              {hrUser.full_name[0].toUpperCase()}
+            </div>
+            <div style={{ minWidth:0 }}>
+              <div style={{ color:T.white, fontWeight:700, fontSize:'.85rem', whiteSpace:'nowrap', overflow:'hidden', textOverflow:'ellipsis' }}>{hrUser.full_name}</div>
+              <div style={{ color:T.greyD, fontSize:'.65rem', fontFamily:'monospace', marginTop:'1px' }}>{hrUser.hr_id}</div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Live indicator */}
       <div style={{ display: 'flex', alignItems: 'center', gap: '.45rem', padding: '.5rem .75rem', marginBottom: '.75rem', animation: 'sidebarFadeIn .5s ease .1s both' }}>
@@ -128,13 +144,21 @@ export default function Sidebar({ activeTab, setActiveTab, activeConfig }) {
 
       <div style={st.divider} />
 
-      {/* Back */}
-      <button onClick={() => navigate('/')}
-        onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,136,0,.06)'; e.currentTarget.style.borderColor = T.lineO; e.currentTarget.style.color = T.white; }}
-        onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.borderColor = T.line; e.currentTarget.style.color = T.grey; }}
-        style={{ display: 'flex', alignItems: 'center', gap: '.5rem', padding: '.65rem 1rem', background: 'transparent', border: `1px solid ${T.line}`, borderRadius: '10px', fontSize: '.82rem', fontWeight: 500, cursor: 'pointer', fontFamily: "'Outfit',sans-serif", color: T.grey, transition: 'all .2s', width: '100%', animation: 'sidebarFadeIn .5s ease .45s both' }}>
-        <ArrowLeft size={14} /> Back to Home
-      </button>
+      {/* Back + Logout */}
+      <div style={{ display:'flex', flexDirection:'column', gap:'.4rem' }}>
+        <button onClick={() => navigate('/')}
+          onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,136,0,.06)'; e.currentTarget.style.borderColor = T.lineO; e.currentTarget.style.color = T.white; }}
+          onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.borderColor = T.line; e.currentTarget.style.color = T.grey; }}
+          style={{ display: 'flex', alignItems: 'center', gap: '.5rem', padding: '.65rem 1rem', background: 'transparent', border: `1px solid ${T.line}`, borderRadius: '10px', fontSize: '.82rem', fontWeight: 500, cursor: 'pointer', fontFamily: "'Outfit',sans-serif", color: T.grey, transition: 'all .2s', width: '100%', animation: 'sidebarFadeIn .5s ease .45s both' }}>
+          <ArrowLeft size={14} /> Back to Home
+        </button>
+        <button onClick={() => { logoutHR(); navigate('/hr-login', { replace: true }); }}
+          onMouseEnter={e => { e.currentTarget.style.background = 'rgba(239,68,68,.08)'; e.currentTarget.style.borderColor = 'rgba(239,68,68,.35)'; e.currentTarget.style.color = T.red; }}
+          onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.borderColor = T.line; e.currentTarget.style.color = T.grey; }}
+          style={{ display: 'flex', alignItems: 'center', gap: '.5rem', padding: '.65rem 1rem', background: 'transparent', border: `1px solid ${T.line}`, borderRadius: '10px', fontSize: '.82rem', fontWeight: 500, cursor: 'pointer', fontFamily: "'Outfit',sans-serif", color: T.grey, transition: 'all .2s', width: '100%', animation: 'sidebarFadeIn .5s ease .5s both' }}>
+          <LogOut size={14} /> Logout
+        </button>
+      </div>
     </aside>
   );
 }
